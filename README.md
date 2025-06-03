@@ -1,3 +1,5 @@
+The original akshare does not suport proxy setting with dynamic IP. But this version do!
+
 ![AKShare Logo](https://github.com/akfamily/akshare/blob/main/assets/images/akshare_logo.jpg)
 
 [![PyPI - Python Version](https://img.shields.io/pypi/pyversions/akshare.svg)](https://pypi.org/project/akshare/)
