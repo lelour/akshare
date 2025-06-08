@@ -7,7 +7,9 @@ https://legulegu.com/stockdata/marketcap-gdp
 """
 
 import pandas as pd
-import requests
+# import requests
+# 使用代理
+from akshare.request import get
 
 from akshare.stock_feature.stock_a_indicator import get_token_lg, get_cookie_csrf
 
@@ -22,11 +24,18 @@ def stock_buffett_index_lg() -> pd.DataFrame:
     token = get_token_lg()
     url = "https://legulegu.com/api/stockdata/marketcap-gdp/get-marketcap-gdp"
     params = {"token": token}
-    r = requests.get(
-        url,
-        params=params,
-        **get_cookie_csrf(url="https://legulegu.com/stockdata/marketcap-gdp"),
-    )
+
+    # 不使用代理
+    # r = requests.get(
+    #     url,
+    #     params=params,
+    #     **get_cookie_csrf(url="https://legulegu.com/stockdata/marketcap-gdp"),
+    # )
+
+    # 使用代理
+    
+    r = get(url, params=params, **get_cookie_csrf(url="https://legulegu.com/stockdata/marketcap-gdp"))
+
     data_json = r.json()
     temp_df = pd.DataFrame(data_json["data"])
     temp_df.rename(

@@ -9,7 +9,7 @@ https://quote.eastmoney.com/center/gridlist.html#ah_comparison
 import math
 
 import pandas as pd
-import requests
+# import requests
 
 from akshare.utils.tqdm import get_tqdm
 from akshare.utils.func import fetch_paginated_data

@@ -9,8 +9,10 @@ http://webapi.cninfo.com.cn/#/thematicStatistics
 import time
 
 import pandas as pd
-import requests
+# import requests
 import py_mini_racer
+# 使用代理
+from akshare.request import post
 
 js_str = """
     function mcode(input) {
@@ -90,7 +92,11 @@ def stock_cg_lawsuit_cninfo(
         "edate": "-".join([end_date[:4], end_date[4:6], end_date[6:]]),
         "market": symbol_map[symbol],
     }
-    r = requests.post(url, headers=headers, params=params)
+    # 不使用代理
+    # r = requests.post(url, headers=headers, params=params)
+
+    # 使用代理
+    r = post(url, headers=headers, params=params)
     data_json = r.json()
     temp_df = pd.DataFrame(data_json["records"])
     temp_df.columns = [

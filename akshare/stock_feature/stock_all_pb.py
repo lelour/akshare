@@ -7,7 +7,9 @@ https://www.legulegu.com/stockdata/all-pb
 """
 
 import pandas as pd
-import requests
+# import requests
+# 使用代理
+from akshare.request import get
 
 from akshare.stock_feature.stock_a_indicator import get_token_lg, get_cookie_csrf
 
@@ -24,11 +26,18 @@ def stock_a_all_pb() -> pd.DataFrame:
         "marketId": "ALL",
         "token": get_token_lg(),
     }
-    r = requests.get(
-        url,
-        params=params,
-        **get_cookie_csrf(url="https://legulegu.com/stockdata/all-pb"),
-    )
+
+    # 不使用代理
+    # r = requests.get(
+    #     url,
+    #     params=params,
+    #     **get_cookie_csrf(url="https://legulegu.com/stockdata/all-pb"),
+    # )
+
+    # 使用代理
+    
+    r = get(url, params=params, **get_cookie_csrf(url="https://legulegu.com/stockdata/all-pb"))
+
     data_json = r.json()
     temp_df = pd.DataFrame(data_json["data"])
     temp_df["date"] = (

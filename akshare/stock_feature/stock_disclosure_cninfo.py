@@ -10,7 +10,10 @@ import math
 from functools import lru_cache
 
 import pandas as pd
-import requests
+# import requests
+# 使用代理
+from akshare.request import get
+from akshare.request import post
 
 from akshare.utils.tqdm import get_tqdm
 
@@ -74,7 +77,12 @@ def __get_stock_json(symbol: str = "沪深京") -> dict:
         url = "http://www.cninfo.com.cn/new/data/fund_stock.json"
     elif symbol == "债券":
         url = "http://www.cninfo.com.cn/new/data/bond_stock.json"
-    r = requests.get(url)
+    # 不使用代理
+    # r = requests.get(url)
+
+    # 使用代理
+    r = get(url)
+
     text_json = r.json()
     temp_df = pd.DataFrame([item for item in text_json["stockList"]])
     return dict(zip(temp_df["code"], temp_df["orgId"]))
@@ -142,14 +150,24 @@ def stock_zh_a_disclosure_report_cninfo(
         "sortType": "",
         "isHLtitle": "true",
     }
-    r = requests.post(url, params=payload)
+    # 不使用代理
+    # r = requests.post(url, params=payload)
+
+    # 使用代理
+    r = post(url, params=payload)
+
     text_json = r.json()
     page_num = math.ceil(int(text_json["totalAnnouncement"]) / 30)
     big_df = pd.DataFrame()
     tqdm = get_tqdm()
     for page in tqdm(range(1, page_num + 1), leave=False):
         payload.update({"pageNum": page})
-        r = requests.post(url, data=payload)
+        # 不使用代理
+        # r = requests.post(url, data=payload)
+
+        # 使用代理
+        r = post(url, data=payload)
+
         text_json = r.json()
         temp_df = pd.DataFrame(text_json["announcements"])
         big_df = pd.concat(objs=[big_df, temp_df], ignore_index=True)
@@ -237,14 +255,24 @@ def stock_zh_a_disclosure_relation_cninfo(
         "sortType": "",
         "isHLtitle": "true",
     }
-    r = requests.post(url, data=payload)
+    # 不使用代理
+    # r = requests.post(url, data=payload)
+
+    # 使用代理
+    r = post(url, data=payload)
+
     text_json = r.json()
     page_num = math.ceil(int(text_json["totalAnnouncement"]) / 30)
     big_df = pd.DataFrame()
     tqdm = get_tqdm()
     for page in tqdm(range(1, page_num + 1), leave=False):
         payload.update({"pageNum": page})
-        r = requests.post(url, data=payload)
+        # 不使用代理
+        # r = requests.post(url, data=payload)
+
+        # 使用代理
+        r = post(url, data=payload)
+
         text_json = r.json()
         temp_df = pd.DataFrame(text_json["announcements"])
         big_df = pd.concat(objs=[big_df, temp_df], ignore_index=True)

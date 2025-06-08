@@ -9,8 +9,9 @@ https://stockpage.10jqka.com.cn/HK0700/bonus/
 from io import StringIO
 
 import pandas as pd
-import requests
-
+# import requests
+# 使用代理
+from akshare.request import get
 
 def stock_hk_fhpx_detail_ths(symbol: str = "0700") -> pd.DataFrame:
     """
@@ -27,7 +28,11 @@ def stock_hk_fhpx_detail_ths(symbol: str = "0700") -> pd.DataFrame:
         "AppleWebKit/537.36 (KHTML, like Gecko) "
         "Chrome/89.0.4389.90 Safari/537.36",
     }
-    r = requests.get(url, headers=headers)
+    # 不使用代理
+    # r = requests.get(url, headers=headers)
+
+    # 使用代理
+    r = get(url, headers=headers)
     r.encoding = "utf-8"
     temp_df = pd.read_html(StringIO(r.text))[0]
     temp_df.columns = [

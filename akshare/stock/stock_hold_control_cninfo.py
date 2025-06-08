@@ -13,7 +13,10 @@ import datetime
 
 import pandas as pd
 import py_mini_racer
-import requests
+# import requests
+# 使用代理
+from akshare.request import get
+from akshare.request import post
 
 from akshare.datasets import get_ths_js
 
@@ -72,7 +75,12 @@ def stock_hold_control_cninfo(symbol: str = "全部") -> pd.DataFrame:
     params = {
         "ctype": symbol_map[symbol],
     }
-    r = requests.get(url, headers=headers, params=params)
+    # 不使用代理
+    # r = requests.get(url, headers=headers, params=params)
+
+    # 使用代理
+    r = get(url, headers=headers, params=params)
+
     data_json = r.json()
     temp_df = pd.DataFrame(data_json["records"])
     temp_df.columns = [
@@ -143,7 +151,12 @@ def stock_hold_management_detail_cninfo(symbol: str = "增持") -> pd.DataFrame:
         "edate": current_date,
         "varytype": symbol_map[symbol],
     }
-    r = requests.post(url, headers=headers, params=params)
+    # 不使用代理
+    # r = requests.post(url, headers=headers, params=params)
+
+    # 使用代理
+    r = post(url, headers=headers, params=params)
+
     data_json = r.json()
     temp_df = pd.DataFrame(data_json["records"])
     temp_df.columns = [
@@ -236,7 +249,12 @@ def stock_hold_change_cninfo(symbol: str = "全部") -> pd.DataFrame:
     params = {
         "market": symbol_map[symbol],
     }
-    r = requests.get(url, headers=headers, params=params)
+    # 不使用代理
+    # r = requests.get(url, headers=headers, params=params)
+
+    # 使用代理
+    r = get(url, headers=headers, params=params)
+
     data_json = r.json()
     temp_df = pd.DataFrame(data_json["records"])
     temp_df.columns = [

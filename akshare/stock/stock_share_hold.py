@@ -14,7 +14,10 @@ https://www.sse.com.cn/disclosure/credibility/supervision/change/
 import json
 
 import pandas as pd
-import requests
+# import requests
+# 使用代理
+from akshare.request import get
+
 from tqdm import tqdm
 
 
@@ -49,7 +52,12 @@ def stock_share_hold_change_sse(symbol: str = "600000") -> pd.DataFrame:
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) "
         "Chrome/93.0.4577.63 Safari/537.36",
     }
-    r = requests.get(url, headers=headers, params=params)
+    # 不使用代理
+    # r = requests.get(url, headers=headers, params=params)
+
+    # 使用代理
+    r = get(url, headers=headers, params=params)
+
     data_json = r.json()
     total_page = data_json["pageHelp"]["pageCount"]
     big_df = pd.DataFrame()
@@ -61,7 +69,12 @@ def stock_share_hold_change_sse(symbol: str = "600000") -> pd.DataFrame:
                 "pageHelp.endPage": page,
             }
         )
-        r = requests.get(url, headers=headers, params=params)
+        # 不使用代理
+        # r = requests.get(url, headers=headers, params=params)
+
+        # 使用代理
+        r = get(url, headers=headers, params=params)
+
         data_json = r.json()
         temp_df = pd.DataFrame(data_json["result"])
         big_df = pd.concat(objs=[big_df, temp_df], axis=0, ignore_index=True)
@@ -137,7 +150,12 @@ def stock_share_hold_change_szse(symbol: str = "全部") -> pd.DataFrame:
         "random": "0.7874198771222201",
     }
     params if symbol == "全部" else params.update({"txtDMorJC": symbol})
-    r = requests.get(url, headers=headers, params=params)
+    # 不使用代理
+    # r = requests.get(url, headers=headers, params=params)
+
+    # 使用代理
+    r = get(url, headers=headers, params=params)
+
     data_json = r.json()
     total_page = data_json[0]["metadata"]["pagecount"]
     big_df = pd.DataFrame()
@@ -147,7 +165,12 @@ def stock_share_hold_change_szse(symbol: str = "全部") -> pd.DataFrame:
                 "PAGENO": page,
             }
         )
-        r = requests.get(url, headers=headers, params=params)
+        # 不使用代理
+        # r = requests.get(url, headers=headers, params=params)
+
+        # 使用代理
+        r = get(url, headers=headers, params=params)
+
         data_json = r.json()
         temp_df = pd.DataFrame(data_json[0]["data"])
         big_df = pd.concat(objs=[big_df, temp_df], axis=0, ignore_index=True)
@@ -218,7 +241,12 @@ def stock_share_hold_change_bse(symbol: str = "430489") -> pd.DataFrame:
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) "
         "Chrome/93.0.4577.63 Safari/537.36",
     }
-    r = requests.get(url, headers=headers, params=params)
+    # 不使用代理
+    # r = requests.get(url, headers=headers, params=params)
+
+    # 使用代理
+    r = get(url, headers=headers, params=params)
+
     data_text = r.text
     data_text = data_text.strip("null(").strip(")")
     data_json = json.loads(data_text)
@@ -230,7 +258,12 @@ def stock_share_hold_change_bse(symbol: str = "430489") -> pd.DataFrame:
                 "page": page,
             }
         )
-        r = requests.get(url, headers=headers, params=params)
+        # 不使用代理
+        # r = requests.get(url, headers=headers, params=params)
+
+        # 使用代理
+        r = get(url, headers=headers, params=params)
+
         data_text = r.text
         data_text = data_text.strip("null(").strip(")")
         data_json = json.loads(data_text)

@@ -7,8 +7,9 @@ https://quote.eastmoney.com/center/gridlist.html#us_pinksheet
 """
 
 import pandas as pd
-import requests
-
+# import requests
+# 使用代理
+from akshare.request import get
 
 def stock_us_pink_spot_em() -> pd.DataFrame:
     """
@@ -31,7 +32,12 @@ def stock_us_pink_spot_em() -> pd.DataFrame:
         "fields": "f1,f2,f3,f4,f5,f6,f7,f8,f9,f10,f12,f13,f14,f15,f16,f17,f18,f20,f21,f23,f24,f25,"
         "f26,f22,f33,f11,f62,f128,f136,f115,f152",
     }
-    r = requests.get(url, params=params)
+    # 不使用代理
+    # r = requests.get(url, params=params)
+
+    # 使用代理
+    r = get(url, params=params)
+
     data_json = r.json()
     temp_df = pd.DataFrame(data_json["data"]["diff"]).T
     temp_df.columns = [

@@ -3108,7 +3108,7 @@ amac_manager_cancelled_info # 中国证券投资基金业协会-信息公示-诚
 """
 
 __version__ = "1.16.97"
-__author__ = "AKFamily"
+__author__ = "lelour"
 
 import sys
 import warnings
@@ -5646,3 +5646,16 @@ try:
     from akqmt import xt_api
 except ImportError as e:
     pass
+
+
+# 导入代理管理器和请求模块
+from akshare.proxy_manager import proxy_manager
+from akshare.request import (
+    make_request,
+    make_request_with_retry_json,
+    make_request_with_retry_text,
+    get,
+    post,
+    put,
+    delete,
+)

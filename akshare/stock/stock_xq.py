@@ -44,6 +44,7 @@ def stock_individual_spot_xq(
     :rtype: pandas.DataFrame
     """
     from akshare.stock.cons import xq_a_token
+    # 暂时没改动
     session = requests.Session()
     xq_a_token = token or xq_a_token
     headers = {

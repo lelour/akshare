@@ -7,7 +7,9 @@ https://www.legulegu.com/stockdata/high-low-statistics
 """
 
 import pandas as pd
-import requests
+# import requests
+# 使用代理
+from akshare.request import get
 
 from akshare.utils.cons import headers
 
@@ -22,7 +24,12 @@ def stock_a_high_low_statistics(symbol: str = "all") -> pd.DataFrame:
     :rtype: pandas.DataFrame
     """
     url = f"https://www.legulegu.com/stockdata/member-ship/get-high-low-statistics/{symbol}"
-    r = requests.get(url, headers=headers)
+    # 不使用代理
+    # r = requests.get(url, headers=headers)
+
+    # 使用代理
+    r = get(url, headers=headers)
+
     data_json = r.json()
     temp_df = pd.DataFrame(data_json)
     del temp_df["indexCode"]

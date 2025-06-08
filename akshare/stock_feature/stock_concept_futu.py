@@ -9,7 +9,10 @@ https://www.futunn.com/quote/sparks-us
 import json
 
 import pandas as pd
-import requests
+# import requests
+# 使用代理
+from akshare.request import get
+
 from bs4 import BeautifulSoup
 
 
@@ -33,7 +36,12 @@ def _stock_concept_cons_futu(symbol: str = "巴菲特持仓") -> pd.DataFrame:
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
         "(KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36",
     }
-    r = requests.get(url, params=params, headers=headers)
+    # 不使用代理
+    # r = requests.get(url, params=params, headers=headers)
+
+    # 使用代理
+    r = get(url, params=params, headers=headers)
+
     soup = BeautifulSoup(r.text, features="lxml")
     temp_code_name = [
         item.find_all("div", attrs={"class": "fix-left"})
@@ -122,7 +130,12 @@ def stock_concept_cons_futu(symbol: str = "特朗普概念股") -> pd.DataFrame:
             "(KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36",
             "Quote-Token": "7f74cd2a5e",
         }
-        r = requests.get(url, params=params, headers=headers)
+        # 不使用代理
+        # r = requests.get(url, params=params, headers=headers)
+
+        # 使用代理
+        r = get(url, params=params, headers=headers)
+
         data_json = r.json()
         total_page = data_json["data"]["pagination"]["pageCount"]
         big_df = pd.DataFrame()
@@ -134,7 +147,12 @@ def stock_concept_cons_futu(symbol: str = "特朗普概念股") -> pd.DataFrame:
             )
             if page == 1:
                 headers.update({"Quote-Token": "a3043d6fed"})
-            r = requests.get(url, params=params, headers=headers)
+            # 不使用代理
+            # r = requests.get(url, params=params, headers=headers)
+
+            # 使用代理
+            r = get(url, params=params, headers=headers)
+
             data_json = r.json()
             temp_df = pd.DataFrame(data_json["data"]["list"])
             big_df = pd.concat(objs=[big_df, temp_df], ignore_index=True)

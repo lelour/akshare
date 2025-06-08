@@ -7,7 +7,10 @@ https://data.eastmoney.com/invest/invest/list.html
 """
 
 import pandas as pd
-import requests
+# import requests
+# 使用代理
+from akshare.request import get
+
 from akshare.utils.tqdm import get_tqdm
 from akshare.utils.cons import headers
 
@@ -35,14 +38,24 @@ def stock_analyst_rank_em(year: str = "2024") -> pd.DataFrame:
         "distinct": "ANALYST_CODE",
         "limit": "top100",
     }
-    r = requests.get(url, params=params, headers=headers)
+    # 不使用代理
+    # r = requests.get(url, params=params, headers=headers)
+
+    # 使用代理
+    r = get(url, params=params, headers=headers)
+
     data_json = r.json()
     total_page = data_json["result"]["pages"]
     big_df = pd.DataFrame()
     tqdm = get_tqdm()
     for page in tqdm(range(1, total_page + 1), leave=False):
         params.update({"pageNumber": page})
-        r = requests.get(url, params=params, headers=headers)
+        # 不使用代理
+        # r = requests.get(url, params=params, headers=headers)
+
+        # 使用代理
+        r = get(url, params=params, headers=headers)
+
         data_json = r.json()
         data_df = pd.DataFrame(data_json["result"]["data"])
         big_df = pd.concat(objs=[big_df, data_df], ignore_index=True)
@@ -128,7 +141,12 @@ def stock_analyst_detail_em(
             "pageSize": "1000",
             "filter": f'(ANALYST_CODE="{analyst_id}")',
         }
-        r = requests.get(url, params=params, headers=headers)
+        # 不使用代理
+        # r = requests.get(url, params=params, headers=headers)
+
+        # 使用代理
+        r = get(url, params=params, headers=headers)
+
         data_json = r.json()
         temp_df = pd.DataFrame(data_json["result"]["data"])
         temp_df.reset_index(inplace=True)
@@ -186,7 +204,12 @@ def stock_analyst_detail_em(
             "pageSize": "1000",
             "filter": f'(ANALYST_CODE="{analyst_id}")',
         }
-        r = requests.get(url, params=params, headers=headers)
+        # 不使用代理
+        # r = requests.get(url, params=params, headers=headers)
+
+        # 使用代理
+        r = get(url, params=params, headers=headers)
+
         data_json = r.json()
         temp_df = pd.DataFrame(data_json["result"]["data"])
         temp_df.reset_index(inplace=True)
@@ -235,7 +258,12 @@ def stock_analyst_detail_em(
             "source": "WEB",
             "client": "WEB",
         }
-        r = requests.get(url, params=params, headers=headers)
+        # 不使用代理
+        # r = requests.get(url, params=params, headers=headers)
+
+        # 使用代理
+        r = get(url, params=params, headers=headers)
+
         data_json = r.json()
         temp_df = pd.DataFrame(data_json["result"]["data"])
         temp_df = temp_df[

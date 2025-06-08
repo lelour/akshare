@@ -7,7 +7,10 @@ https://gushitong.baidu.com/expressnews
 """
 
 import pandas as pd
-import requests
+# import requests
+# 使用代理
+from akshare.request import get
+
 from datetime import datetime
 
 
@@ -46,7 +49,12 @@ def stock_hot_search_baidu(
         "type": "day" if time == "今日" else "hour",
         "finClientType": "pc",
     }
-    r = requests.get(url, params=params)
+    # 不使用代理
+    # r = requests.get(url, params=params)
+
+    # 使用代理
+    r = get(url, params=params)
+
     data_json = r.json()
     temp_df = pd.DataFrame(
         data_json["Result"]["body"], columns=data_json["Result"]["header"]

@@ -10,7 +10,9 @@ Desc: 腾讯-股票-实时行情-成交明细
 import warnings
 
 import pandas as pd
-import requests
+# import requests
+# 使用代理
+from akshare.request import get
 
 
 def stock_zh_a_tick_tx_js(symbol: str = "sz000001") -> pd.DataFrame:
@@ -34,7 +36,12 @@ def stock_zh_a_tick_tx_js(symbol: str = "sz000001") -> pd.DataFrame:
                 "c": symbol,
                 "p": page,
             }
-            r = requests.get(url, params=params)
+            # 不使用代理
+            # r = requests.get(url, params=params)
+
+            # 使用代理
+            r = get(url, params=params)
+
             text_data = r.text
             temp_df = (
                 pd.DataFrame(eval(text_data[text_data.find("[") :])[1].split("|"))

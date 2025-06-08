@@ -7,7 +7,9 @@ http://data.eastmoney.com/zlsj/2020-06-30-1-2.html
 """
 
 import pandas as pd
-import requests
+# import requests
+# 使用代理
+from akshare.request import get
 
 
 def stock_report_fund_hold(
@@ -44,7 +46,11 @@ def stock_report_fund_hold(
         "p": "1",
         "pageNo": "1",
     }
-    r = requests.get(url, params=params)
+    # 不使用代理
+    # r = requests.get(url, params=params)
+
+    # 使用代理
+    r = get(url, params=params)
     data_json = r.json()
     total_page = data_json["pages"]
     big_df = pd.DataFrame()
@@ -60,7 +66,11 @@ def stock_report_fund_hold(
             "p": page,
             "pageNo": page,
         }
-        r = requests.get(url, params=params)
+        # 不使用代理
+        # r = requests.get(url, params=params)
+
+        # 使用代理
+        r = get(url, params=params)
         data_json = r.json()
         temp_df = pd.DataFrame(data_json["data"])
         big_df = pd.concat([big_df, temp_df], ignore_index=True)
@@ -134,7 +144,11 @@ def stock_report_fund_hold_detail(
         "source": "WEB",
         "client": "WEB",
     }
-    r = requests.get(url, params=params)
+    # 不使用代理
+    # r = requests.get(url, params=params)
+
+    # 使用代理
+    r = get(url, params=params)
     data_json = r.json()
     temp_df = pd.DataFrame(data_json["result"]["data"])
     temp_df.reset_index(inplace=True)

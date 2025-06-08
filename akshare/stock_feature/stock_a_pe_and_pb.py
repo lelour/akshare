@@ -10,7 +10,9 @@ from datetime import datetime
 
 import pandas as pd
 import py_mini_racer
-import requests
+# import requests
+# 使用代理
+from akshare.request import get
 
 from akshare.stock_feature.stock_a_indicator import get_cookie_csrf
 
@@ -344,7 +346,12 @@ def stock_market_pe_lg(symbol: str = "深证") -> pd.DataFrame:
             "创业板": "https://legulegu.com/stockdata/cybPE",
         }
         params = {"token": token, "marketId": symbol_map[symbol]}
-        r = requests.get(url, params=params, **get_cookie_csrf(url=url_map[symbol]))
+        # 不使用代理
+        # r = requests.get(url, params=params, **get_cookie_csrf(url=url_map[symbol]))
+
+        # 使用代理
+        r = get(url, params=params, **get_cookie_csrf(url=url_map[symbol]))
+
         data_json = r.json()
         temp_df = pd.DataFrame(data_json["data"])
         temp_df["date"] = (
@@ -368,11 +375,17 @@ def stock_market_pe_lg(symbol: str = "深证") -> pd.DataFrame:
     else:
         url = "https://legulegu.com/api/stockdata/get-ke-chuang-ban-pe"
         params = {"token": token}
-        r = requests.get(
-            url,
-            params=params,
-            **get_cookie_csrf(url="https://legulegu.com/stockdata/ke-chuang-ban-pe"),
-        )
+
+        # 不使用代理
+        # r = requests.get(
+        #     url,
+        #     params=params,
+        #     **get_cookie_csrf(url="https://legulegu.com/stockdata/ke-chuang-ban-pe"),
+        # )
+
+        # 使用代理
+        r = get(url, params=params, **get_cookie_csrf(url="https://legulegu.com/stockdata/ke-chuang-ban-pe"))
+
         data_json = r.json()
         temp_df = pd.DataFrame(data_json["data"])
         temp_df["date"] = (
@@ -423,11 +436,17 @@ def stock_index_pe_lg(symbol: str = "沪深300") -> pd.DataFrame:
     }
     url = "https://legulegu.com/api/stockdata/index-basic-pe"
     params = {"token": token, "indexCode": symbol_map[symbol]}
-    r = requests.get(
-        url,
-        params=params,
-        **get_cookie_csrf(url="https://legulegu.com/stockdata/sz50-ttm-lyr"),
-    )
+
+    # 不使用代理
+    # r = requests.get(
+    #     url,
+    #     params=params,
+    #     **get_cookie_csrf(url="https://legulegu.com/stockdata/sz50-ttm-lyr"),
+    # )
+
+    # 使用代理
+    r = get(url, params=params, **get_cookie_csrf(url="https://legulegu.com/stockdata/sz50-ttm-lyr"))
+
     data_json = r.json()
     temp_df = pd.DataFrame(data_json["data"])
     temp_df["date"] = (
@@ -481,7 +500,12 @@ def stock_market_pb_lg(symbol: str = "上证") -> pd.DataFrame:
         "科创版": "https://legulegu.com/stockdata/ke-chuang-ban-pb",
     }
     params = {"token": token, "indexCode": symbol_map[symbol]}
-    r = requests.get(url, params=params, **get_cookie_csrf(url=url_map[symbol]))
+    # 不使用代理
+    # r = requests.get(url, params=params, **get_cookie_csrf(url=url_map[symbol]))
+
+    # 使用代理
+    r = get(url, params=params, **get_cookie_csrf(url=url_map[symbol]))
+
     data_json = r.json()
     temp_df = pd.DataFrame(data_json["data"])
     temp_df["date"] = (
@@ -536,11 +560,17 @@ def stock_index_pb_lg(symbol: str = "上证50") -> pd.DataFrame:
     }
     url = "https://legulegu.com/api/stockdata/index-basic-pb"
     params = {"token": token, "indexCode": symbol_map[symbol]}
-    r = requests.get(
-        url,
-        params=params,
-        **get_cookie_csrf(url="https://legulegu.com/stockdata/zz500-ttm-lyr"),
-    )
+
+    # 不使用代理
+    # r = requests.get(
+    #     url,
+    #     params=params,
+    #     **get_cookie_csrf(url="https://legulegu.com/stockdata/zz500-ttm-lyr"),
+    # )
+
+    # 使用代理
+    r = get(url, params=params, **get_cookie_csrf(url="https://legulegu.com/stockdata/zz500-ttm-lyr"))
+
     data_json = r.json()
     temp_df = pd.DataFrame(data_json["data"])
     temp_df["date"] = (

@@ -7,7 +7,9 @@ https://emweb.securities.eastmoney.com/PC_HKF10/pages/home/index.html?code=03900
 """
 
 import pandas as pd
-import requests
+# import requests
+# 使用代理
+from akshare.request import get
 
 
 def stock_hk_security_profile_em(symbol: str = "03900") -> pd.DataFrame:
@@ -35,7 +37,12 @@ def stock_hk_security_profile_em(symbol: str = "03900") -> pd.DataFrame:
         'client': 'PC',
         'v': '04748497219912483'
     }
-    r = requests.get(url, params=params)
+    # 不使用代理
+    # r = requests.get(url, params=params)
+
+    # 使用代理
+    r = get(url, params=params)
+
     data_json = r.json()
     temp_df = pd.DataFrame(data_json['result']['data'])
     field_mapping = {
@@ -99,7 +106,12 @@ def stock_hk_company_profile_em(symbol: str = "03900") -> pd.DataFrame:
         'client': 'PC',
         'v': '04748497219912483'
     }
-    r = requests.get(url, params=params)
+    # 不使用代理
+    # r = requests.get(url, params=params)
+
+    # 使用代理
+    r = get(url, params=params)
+
     data_json = r.json()
     temp_df = pd.DataFrame(data_json['result']['data'])
     field_mapping = {

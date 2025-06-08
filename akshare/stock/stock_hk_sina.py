@@ -7,7 +7,10 @@ https://stock.finance.sina.com.cn/hkstock/quotes/00700.html
 """
 
 import pandas as pd
-import requests
+# import requests
+# 使用代理
+from akshare.request import get
+
 import py_mini_racer
 
 from akshare.stock.cons import (
@@ -28,7 +31,12 @@ def stock_hk_spot() -> pd.DataFrame:
     :return: 实时行情数据
     :rtype: pandas.DataFrame
     """
-    res = requests.get(hk_sina_stock_list_url, params=hk_sina_stock_dict_payload)
+    # 不使用代理
+    # res = requests.get(hk_sina_stock_list_url, params=hk_sina_stock_dict_payload)
+    
+    # 使用代理
+    res = get(hk_sina_stock_list_url, params=hk_sina_stock_dict_payload)
+
     data_json = [
         demjson.decode(tt)
         for tt in [
@@ -70,7 +78,12 @@ def stock_hk_daily(symbol: str = "00981", adjust: str = "") -> pd.DataFrame:
     :return: 指定 adjust 的数据
     :rtype: pandas.DataFrame
     """
-    r = requests.get(hk_sina_stock_hist_url.format(symbol))
+    # 不使用代理
+    # r = requests.get(hk_sina_stock_hist_url.format(symbol))
+
+    # 使用代理
+    r = get(hk_sina_stock_hist_url.format(symbol))
+
     js_code = py_mini_racer.MiniRacer()
     js_code.eval(hk_js_decode)
     dict_list = js_code.call(
@@ -87,7 +100,12 @@ def stock_hk_daily(symbol: str = "00981", adjust: str = "") -> pd.DataFrame:
         return data_df
 
     if adjust == "hfq":
-        r = requests.get(hk_sina_stock_hist_hfq_url.format(symbol))
+        # 不使用代理
+        # r = requests.get(hk_sina_stock_hist_hfq_url.format(symbol))
+
+        # 使用代理
+        r = get(hk_sina_stock_hist_hfq_url.format(symbol))
+
         try:
             hfq_factor_df = pd.DataFrame(
                 eval(r.text.split("=")[1].split("\n")[0])["data"]
@@ -151,7 +169,12 @@ def stock_hk_daily(symbol: str = "00981", adjust: str = "") -> pd.DataFrame:
         return temp_df
 
     if adjust == "qfq":
-        r = requests.get(hk_sina_stock_hist_qfq_url.format(symbol))
+        # 不使用代理
+        # r = requests.get(hk_sina_stock_hist_qfq_url.format(symbol))
+
+        # 使用代理
+        r = get(hk_sina_stock_hist_qfq_url.format(symbol))
+
         try:
             qfq_factor_df = pd.DataFrame(
                 eval(r.text.split("=")[1].split("\n")[0])["data"]
@@ -216,7 +239,12 @@ def stock_hk_daily(symbol: str = "00981", adjust: str = "") -> pd.DataFrame:
         return temp_df
 
     if adjust == "hfq-factor":
-        r = requests.get(hk_sina_stock_hist_hfq_url.format(symbol))
+        # 不使用代理
+        # r = requests.get(hk_sina_stock_hist_hfq_url.format(symbol))
+
+        # 使用代理
+        r = get(hk_sina_stock_hist_hfq_url.format(symbol))
+
         hfq_factor_df = pd.DataFrame(eval(r.text.split("=")[1].split("\n")[0])["data"])
         hfq_factor_df.columns = ["date", "hfq_factor", "cash"]
         hfq_factor_df.index = pd.to_datetime(hfq_factor_df.date)
@@ -226,7 +254,12 @@ def stock_hk_daily(symbol: str = "00981", adjust: str = "") -> pd.DataFrame:
         return hfq_factor_df
 
     if adjust == "qfq-factor":
-        r = requests.get(hk_sina_stock_hist_qfq_url.format(symbol))
+        # 不使用代理
+        # r = requests.get(hk_sina_stock_hist_qfq_url.format(symbol))
+
+        # 使用代理
+        r = get(hk_sina_stock_hist_qfq_url.format(symbol))
+
         qfq_factor_df = pd.DataFrame(eval(r.text.split("=")[1].split("\n")[0])["data"])
         qfq_factor_df.columns = ["date", "qfq_factor"]
         qfq_factor_df.index = pd.to_datetime(qfq_factor_df.date)

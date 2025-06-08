@@ -9,7 +9,9 @@ https://stockapp.finance.qq.com/mstats/#mod=list&id=hk_ah&module=HK&type=AH&sort
 import random
 
 import pandas as pd
-import requests
+# import requests
+# 使用代理
+from akshare.request import get
 
 from akshare.stock.cons import (
     hk_url,
@@ -31,7 +33,12 @@ def _get_zh_stock_ah_page_count() -> int:
     """
     hk_payload_copy = hk_payload.copy()
     hk_payload_copy.update({"reqPage": 1})
-    r = requests.get(hk_url, params=hk_payload_copy, headers=hk_headers)
+    # 不使用代理
+    # r = requests.get(hk_url, params=hk_payload_copy, headers=hk_headers)
+
+    # 使用代理
+    r = get(hk_url, params=hk_payload_copy, headers=hk_headers)
+
     data_json = demjson.decode(r.text[r.text.find("{") : r.text.rfind("}") + 1])
     page_count = data_json["data"]["page_count"]
     return page_count
@@ -49,7 +56,12 @@ def stock_zh_ah_spot() -> pd.DataFrame:
     tqdm = get_tqdm()
     for i in tqdm(range(0, page_count), leave=False):
         hk_payload.update({"reqPage": i})
-        r = requests.get(hk_url, params=hk_payload, headers=hk_headers)
+        # 不使用代理
+        # r = requests.get(hk_url, params=hk_payload, headers=hk_headers)
+
+        # 使用代理
+        r = get(hk_url, params=hk_payload, headers=hk_headers)
+
         data_json = demjson.decode(r.text[r.text.find("{") : r.text.rfind("}") + 1])
         big_df = pd.concat(
             objs=[
@@ -119,7 +131,12 @@ def stock_zh_ah_name() -> pd.DataFrame:
     tqdm = get_tqdm()
     for i in tqdm(range(0, page_count), leave=False):
         hk_payload.update({"reqPage": i})
-        r = requests.get(hk_url, params=hk_payload, headers=hk_headers)
+        # 不使用代理
+        # r = requests.get(hk_url, params=hk_payload, headers=hk_headers)
+
+        # 使用代理
+        r = get(hk_url, params=hk_payload, headers=hk_headers)
+
         data_json = demjson.decode(r.text[r.text.find("{") : r.text.rfind("}") + 1])
         big_df = pd.concat(
             objs=[
@@ -203,17 +220,32 @@ def stock_zh_ah_daily(
                 "Referer": "http://gu.qq.com/hk01033/gp",
                 "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.125 Safari/537.36",
             }
-            r = requests.get(
+            # 不使用代理
+            # r = requests.get(
+            #     url="http://web.ifzq.gtimg.cn/appstock/app/kline/kline",
+            #     params=hk_stock_payload_copy,
+            #     headers=headers,
+            # )
+            # 使用代理
+            r = get(
                 url="http://web.ifzq.gtimg.cn/appstock/app/kline/kline",
                 params=hk_stock_payload_copy,
                 headers=headers,
             )
         else:
-            r = requests.get(
+            # 不使用代理
+            # r = requests.get(
+            #     url="https://web.ifzq.gtimg.cn/appstock/app/hkfqkline/get",
+            #     params=hk_stock_payload_copy,
+            #     headers=hk_stock_headers,
+            # )
+            # 使用代理
+            r = get(
                 url="https://web.ifzq.gtimg.cn/appstock/app/hkfqkline/get",
                 params=hk_stock_payload_copy,
                 headers=hk_stock_headers,
             )
+
         data_json = demjson.decode(r.text[r.text.find("{") : r.text.rfind("}") + 1])
         try:
             if adjust == "":

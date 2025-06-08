@@ -11,7 +11,11 @@ from datetime import datetime
 from hashlib import md5
 
 import pandas as pd
-import requests
+# import requests
+# 使用代理
+from akshare.request import get
+from akshare.request import post
+
 from bs4 import BeautifulSoup
 
 from akshare.utils.cons import headers
@@ -24,7 +28,12 @@ def get_cookie_csrf(url: str = "") -> dict:
     :return: 指定市场的市盈率数据
     :rtype: pandas.DataFrame
     """
-    r = requests.get(url, headers=headers)
+    # 不使用代理
+    # r = requests.get(url, headers=headers)
+
+    # 使用代理
+    r = get(url, headers=headers)
+
     soup = BeautifulSoup(r.text, features="lxml")
     csrf_tag = soup.find(name="meta", attrs={"name": "_csrf"})
     csrf_token = csrf_tag.attrs["content"]
@@ -57,7 +66,12 @@ def stock_a_indicator_lg(symbol: str = "000001") -> pd.DataFrame:
     """
     if symbol == "all":
         url = "https://legulegu.com/stocklist"
-        r = requests.get(url, headers=headers)
+        # 不使用代理
+        # r = requests.get(url, headers=headers)
+
+        # 使用代理
+        r = get(url, headers=headers)
+
         soup = BeautifulSoup(r.text, features="lxml")
         node_list = soup.find_all(attrs={"class": "col-xs-6"})
         href_list = [item.find("a")["href"] for item in node_list]
@@ -72,11 +86,20 @@ def stock_a_indicator_lg(symbol: str = "000001") -> pd.DataFrame:
         url = "https://legulegu.com/api/s/base-info/"
         token = get_token_lg()
         params = {"token": token, "id": symbol}
-        r = requests.post(
+        # 不使用代理
+        # r = requests.post(
+        #     url,
+        #     params=params,
+        #     **get_cookie_csrf(url="https://legulegu.com/"),
+        # )
+
+        # 使用代理
+        r = post(
             url,
             params=params,
             **get_cookie_csrf(url="https://legulegu.com/"),
         )
+
         temp_json = r.json()
         temp_df = pd.DataFrame(
             temp_json["data"]["items"],
@@ -105,7 +128,12 @@ def stock_hk_indicator_eniu(
     """
     if indicator == "港股":
         url = "https://eniu.com/static/data/stock_list.json"
-        r = requests.get(url, headers=headers)
+        # 不使用代理
+        # r = requests.get(url, headers=headers)
+
+        # 使用代理
+        r = get(url, headers=headers)
+
         data_json = r.json()
         temp_df = pd.DataFrame(data_json)
         temp_df = temp_df[temp_df["stock_id"].str.contains("hk")]
@@ -121,7 +149,12 @@ def stock_hk_indicator_eniu(
         url = f"https://eniu.com/chart/roeh/{symbol}"
     else:
         url = f"https://eniu.com/chart/marketvalueh/{symbol}"
-    r = requests.get(url, headers=headers)
+    # 不使用代理
+    # r = requests.get(url, headers=headers)
+
+    # 使用代理
+    r = get(url, headers=headers)
+
     data_json = r.json()
     temp_df = pd.DataFrame(data_json)
     return temp_df

@@ -12,7 +12,10 @@ import warnings
 from io import BytesIO, StringIO
 
 import pandas as pd
-import requests
+# import requests
+# 使用代理
+from akshare.request import get
+
 from bs4 import BeautifulSoup
 
 
@@ -33,7 +36,12 @@ def stock_szse_summary(date: str = "20240830") -> pd.DataFrame:
         "txtQueryDate": "-".join([date[:4], date[4:6], date[6:]]),
         "random": "0.39339437497296137",
     }
-    r = requests.get(url, params=params)
+    # 不使用代理
+    # r = requests.get(url, params=params)
+
+    # 使用代理
+    r = get(url, params=params)
+
     with warnings.catch_warnings(record=True):
         warnings.simplefilter("always")
         temp_df = pd.read_excel(BytesIO(r.content), engine="openpyxl")
@@ -64,7 +72,12 @@ def stock_szse_area_summary(date: str = "202203") -> pd.DataFrame:
         "DATETIME": "-".join([date[:4], date[4:6]]),
         "random": "0.39339437497296137",
     }
-    r = requests.get(url, params=params)
+    # 不使用代理
+    # r = requests.get(url, params=params)
+
+    # 使用代理
+    r = get(url, params=params)
+
     with warnings.catch_warnings(record=True):
         warnings.simplefilter("always")
         temp_df = pd.read_excel(BytesIO(r.content), engine="openpyxl")
@@ -103,7 +116,12 @@ def stock_szse_sector_summary(
     :rtype: pandas.DataFrame
     """
     url = "https://www.szse.cn/market/periodical/month/index.html"
-    r = requests.get(url)
+    # 不使用代理
+    # r = requests.get(url)
+
+    # 使用代理
+    r = get(url)
+
     r.encoding = "utf8"
     soup = BeautifulSoup(r.text, features="lxml")
     tags_list = soup.find_all(name="div", attrs={"class": "g-container"})[1].find_all(
@@ -127,7 +145,12 @@ def stock_szse_sector_summary(
     )
     date_format = "-".join([date[:4], date[4:]])
     url = f"https://www.szse.cn/market/periodical/month/{date_url_dict[date_format]}"
-    r = requests.get(url)
+    # 不使用代理
+    # r = requests.get(url)
+
+    # 使用代理
+    r = get(url)
+
     r.encoding = "utf8"
     soup = BeautifulSoup(r.text, features="lxml")
     url = [
@@ -135,7 +158,12 @@ def stock_szse_sector_summary(
     ][0]["href"]
 
     if symbol == "当月":
-        r = requests.get(url)
+        # 不使用代理
+        # r = requests.get(url)
+
+        # 使用代理
+        r = get(url)
+
         temp_df = pd.read_html(StringIO(r.text), encoding="gbk")[0]
         temp_df.columns = [
             "项目名称",
@@ -198,7 +226,12 @@ def stock_sse_summary() -> pd.DataFrame:
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) "
         "Chrome/89.0.4389.90 Safari/537.36",
     }
-    r = requests.get(url, params=params, headers=headers)
+    # 不使用代理
+    # r = requests.get(url, params=params, headers=headers)
+
+    # 使用代理
+    r = get(url, params=params, headers=headers)
+
     data_json = r.json()
     temp_df = pd.DataFrame(data_json["result"]).T
     temp_df.reset_index(inplace=True)
@@ -245,7 +278,12 @@ def stock_sse_deal_daily(date: str = "20241216") -> pd.DataFrame:
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) "
         "Chrome/89.0.4389.90 Safari/537.36",
     }
-    r = requests.get(url, params=params, headers=headers)
+    # 不使用代理
+    # r = requests.get(url, params=params, headers=headers)
+
+    # 使用代理
+    r = get(url, params=params, headers=headers)
+
     data_json = r.json()
     temp_df = pd.DataFrame(data_json["result"])
     temp_df = temp_df.T
