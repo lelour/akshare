@@ -7,7 +7,10 @@ https://quote.eastmoney.com/center/gridlist.html#forex_all
 """
 
 import pandas as pd
-import requests
+# import requests
+
+# 使用代理
+from akshare.request import get
 
 from akshare.forex.cons import symbol_market_map
 
@@ -33,7 +36,11 @@ def forex_spot_em() -> pd.DataFrame:
         "dect": "1",
         "wbp2u": "|0|0|0|web",
     }
-    r = requests.get(url, params=params)
+    # r = requests.get(url, params=params)
+
+    # 使用代理
+    r = get(url=url, params=params)
+
     data_json = r.json()
     temp_df = pd.DataFrame(data_json["data"]["diff"]).T
     temp_df.reset_index(inplace=True)
@@ -100,7 +107,11 @@ def forex_hist_em(symbol: str = "USDCNH") -> pd.DataFrame:
         "ut": "f057cbcbce2a86e2866ab8877db1d059",
         "forcect": 1,
     }
-    r = requests.get(url, params=params)
+    # r = requests.get(url, params=params)
+
+    # 使用代理
+    r = get(url=url, params=params)
+
     data_json = r.json()
     temp_df = pd.DataFrame([item.split(",") for item in data_json["data"]["klines"]])
     temp_df["code"] = data_json["data"]["code"]

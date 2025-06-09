@@ -1,10 +1,15 @@
 import requests
 from datetime import datetime
+import os
+from dotenv import load_dotenv
+
+# 加载环境变量
+load_dotenv()
 
 class ProxyManager:
     def __init__(self):
-        self.auth_key = "474020AA"
-        self.password = "1F60C0FDFAB0"
+        self.auth_key = os.getenv("PROXY_AUTH_KEY")  # 不设默认值作为后备
+        self.password = os.getenv("PROXY_PASSWORD")  # 不设默认值作为后备
         self.proxy_list = []
         self.current_proxy_index = 0
         self.proxies = None

@@ -24,6 +24,9 @@ import time
 import pandas as pd
 import requests
 
+# 使用代理
+from akshare.request import get
+
 
 def __get_interest_rate_data(attr_id: str, name: str = "利率") -> pd.DataFrame:
     """
@@ -57,9 +60,14 @@ def __get_interest_rate_data(attr_id: str, name: str = "利率") -> pd.DataFrame
     interest_rate_data = []
     try:
         while True:
-            response = requests.get(
-                url=base_url, params=params, headers=headers, timeout=10
-            )
+            # 不使用代理
+            # response = requests.get(
+            #     url=base_url, params=params, headers=headers, timeout=10
+            # )
+
+            # 使用代理
+            response = get(url=base_url, params=params, headers=headers, timeout=10)
+
             data = response.json()
             if not data.get("data", {}).get("values"):
                 break

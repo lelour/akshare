@@ -15,7 +15,11 @@ from datetime import datetime
 from io import StringIO
 
 import pandas as pd
-import requests
+# import requests
+
+# 使用代理
+from akshare.request import get
+
 from bs4 import BeautifulSoup
 
 from akshare.utils.tqdm import get_tqdm
@@ -43,7 +47,12 @@ def stock_financial_report_sina(
         "page": "1",
         "num": "1000",
     }
-    r = requests.get(url, params=params)
+    # 不使用代理
+    # r = requests.get(url, params=params)
+
+    # 使用代理
+    r = get(url, params=params)
+
     data_json = r.json()
     df_columns = [
         item["date_value"] for item in data_json["result"]["data"]["report_date"]
@@ -108,7 +117,12 @@ def stock_financial_abstract(symbol: str = "600004") -> pd.DataFrame:
         "page": "1",
         "num": "1000",
     }
-    r = requests.get(url, params=params)
+    # 不使用代理
+    # r = requests.get(url, params=params)
+
+    # 使用代理
+    r = get(url, params=params)
+
     data_json = r.json()
     key_list = list(data_json["result"]["data"]["report_list"].keys())
     temp_df = pd.DataFrame(
@@ -195,7 +209,12 @@ def stock_financial_analysis_indicator(
         f"https://money.finance.sina.com.cn/corp/go.php/vFD_FinancialGuideLine/"
         f"stockid/{symbol}/ctrl/2020/displaytype/4.phtml"
     )
-    r = requests.get(url)
+    # 不使用代理
+    # r = requests.get(url)
+
+    # 使用代理
+    r = get(url)
+
     soup = BeautifulSoup(r.text, features="lxml")
     year_context = soup.find(attrs={"id": "con02-1"}).find("table").find_all("a")
     year_list = [item.text for item in year_context]
@@ -266,7 +285,12 @@ def stock_history_dividend() -> pd.DataFrame:
     """
     url = "https://vip.stock.finance.sina.com.cn/q/go.php/vInvestConsult/kind/lsfh/index.phtml"
     params = {"p": "1", "num": "50000"}
-    r = requests.get(url, params=params)
+    # 不使用代理
+    # r = requests.get(url, params=params)
+
+    # 使用代理
+    r = get(url, params=params)
+
     temp_df = pd.read_html(StringIO(r.text))[0]
     temp_df["代码"] = temp_df["代码"].astype(str).str.zfill(6)
     temp_df.columns = [
@@ -307,7 +331,12 @@ def stock_history_dividend_detail(
     """
     if indicator == "分红":
         url = f"https://vip.stock.finance.sina.com.cn/corp/go.php/vISSUE_ShareBonus/stockid/{symbol}.phtml"
-        r = requests.get(url)
+        # 不使用代理
+        # r = requests.get(url)
+
+        # 使用代理
+        r = get(url)
+
         temp_df = pd.read_html(StringIO(r.text))[12]
         temp_df.columns = [item[2] for item in temp_df.columns.tolist()]
         temp_df.columns = [
@@ -346,7 +375,12 @@ def stock_history_dividend_detail(
                 "type": "1",
                 "end_date": date,
             }
-            r = requests.get(url, params=params)
+            # 不使用代理
+            # r = requests.get(url, params=params)
+
+            # 使用代理
+            r = get(url, params=params)
+
             temp_df = pd.read_html(StringIO(r.text))[12]
             temp_df.columns = ["item", "value"]
             return temp_df
@@ -354,7 +388,12 @@ def stock_history_dividend_detail(
             return temp_df
     else:
         url = f"https://vip.stock.finance.sina.com.cn/corp/go.php/vISSUE_ShareBonus/stockid/{symbol}.phtml"
-        r = requests.get(url)
+        # 不使用代理
+        # r = requests.get(url)
+
+        # 使用代理
+        r = get(url)
+
         temp_df = pd.read_html(StringIO(r.text))[13]
         temp_df.columns = [item[1] for item in temp_df.columns.tolist()]
         temp_df.columns = [
@@ -405,7 +444,12 @@ def stock_history_dividend_detail(
                 "type": "1",
                 "end_date": date,
             }
-            r = requests.get(url, params=params)
+            # 不使用代理
+            # r = requests.get(url, params=params)
+
+            # 使用代理
+            r = get(url, params=params)
+
             temp_df = pd.read_html(StringIO(r.text))[12]
             temp_df.columns = ["item", "value"]
             return temp_df
@@ -423,7 +467,12 @@ def stock_ipo_info(stock: str = "600004") -> pd.DataFrame:
     :rtype: pandas.DataFrame
     """
     url = f"https://vip.stock.finance.sina.com.cn/corp/go.php/vISSUE_NewStock/stockid/{stock}.phtml"
-    r = requests.get(url)
+    # 不使用代理
+    # r = requests.get(url)
+
+    # 使用代理
+    r = get(url)
+
     temp_df = pd.read_html(StringIO(r.text))[12]
     temp_df.columns = ["item", "value"]
     return temp_df
@@ -439,7 +488,12 @@ def stock_add_stock(symbol: str = "688166") -> pd.DataFrame:
     :rtype: pandas.DataFrame
     """
     url = f"https://vip.stock.finance.sina.com.cn/corp/go.php/vISSUE_AddStock/stockid/{symbol}.phtml"
-    r = requests.get(url)
+    # 不使用代理
+    # r = requests.get(url)
+
+    # 使用代理
+    r = get(url)
+
     temp_df = pd.read_html(StringIO(r.text))[12]
     if temp_df.at[0, 0] == "对不起，暂时没有相关增发记录":
         raise f"股票 {symbol} 无增发记录"
@@ -471,7 +525,12 @@ def stock_restricted_release_queue_sina(symbol: str = "600000") -> pd.DataFrame:
     :rtype: pandas.DataFrame
     """
     url = f"https://vip.stock.finance.sina.com.cn/q/go.php/vInvestConsult/kind/xsjj/index.phtml?symbol={symbol}"
-    r = requests.get(url)
+    # 不使用代理
+    # r = requests.get(url)
+
+    # 使用代理
+    r = get(url)
+
     temp_df = pd.read_html(StringIO(r.text))[0]
     temp_df.columns = [
         "代码",
@@ -505,7 +564,12 @@ def stock_circulate_stock_holder(symbol: str = "600000") -> pd.DataFrame:
     """
     pd.set_option("future.no_silent_downcasting", True)
     url = f"https://vip.stock.finance.sina.com.cn/corp/go.php/vCI_CirculateStockHolder/stockid/{symbol}.phtml"
-    r = requests.get(url)
+    # 不使用代理
+    # r = requests.get(url)
+
+    # 使用代理
+    r = get(url)
+
     temp_df = pd.read_html(StringIO(r.text))[13].iloc[:, :5]
     temp_df.columns = [*range(5)]
     big_df = pd.DataFrame()
@@ -578,7 +642,12 @@ def stock_fund_stock_holder(symbol: str = "600004") -> pd.DataFrame:
     :rtype: pandas.DataFrame
     """
     url = f"https://vip.stock.finance.sina.com.cn/corp/go.php/vCI_FundStockHolder/stockid/{symbol}.phtml"
-    r = requests.get(url)
+    # 不使用代理
+    # r = requests.get(url)
+
+    # 使用代理
+    r = get(url)
+
     temp_df = pd.read_html(StringIO(r.text))[13].iloc[:, :6]
     temp_df.columns = [*range(6)]
     big_df = pd.DataFrame()
@@ -637,7 +706,12 @@ def stock_main_stock_holder(stock: str = "600004") -> pd.DataFrame:
     :rtype: pandas.DataFrame
     """
     url = f"https://vip.stock.finance.sina.com.cn/corp/go.php/vCI_StockHolder/stockid/{stock}.phtml"
-    r = requests.get(url)
+    # 不使用代理
+    # r = requests.get(url)
+
+    # 使用代理
+    r = get(url)
+
     temp_df = pd.read_html(StringIO(r.text))[13].iloc[:, :5]
     temp_df.columns = [*range(5)]
     big_df = pd.DataFrame()

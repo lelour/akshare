@@ -7,7 +7,10 @@ https://irm.cninfo.com.cn/
 """
 
 import pandas as pd
-import requests
+# import requests
+
+# 使用代理
+from akshare.request import post, get
 
 from akshare.utils.tqdm import get_tqdm
 
@@ -22,7 +25,12 @@ def _fetch_org_id(symbol: str = "000001") -> str:
     url = "https://irm.cninfo.com.cn/newircs/index/queryKeyboardInfo"
     params = {"_t": "1691144074"}
     data = {"keyWord": symbol}
-    r = requests.post(url, params=params, data=data)
+    # 不使用代理
+    # r = requests.post(url, params=params, data=data)
+
+    # 使用代理
+    r = post(url, params=params, data=data)
+
     data_json = r.json()
     org_id = data_json["data"][0]["secid"]
     return org_id
@@ -48,7 +56,12 @@ def stock_irm_cninfo(symbol: str = "002594") -> pd.DataFrame:
         "startDay": "",
         "endDay": "",
     }
-    r = requests.post(url, params=params)
+    # 不使用代理
+    # r = requests.post(url, params=params)
+
+    # 使用代理
+    r = post(url, params=params)
+
     data_json = r.json()
     total_page = int(data_json["totalPage"])
     total_page = 10 if total_page > 10 else total_page
@@ -56,7 +69,12 @@ def stock_irm_cninfo(symbol: str = "002594") -> pd.DataFrame:
     tqdm = get_tqdm()
     for page in tqdm(range(1, 1 + total_page), leave=False):
         params.update({"pageNum": page})
-        r = requests.post(url, params=params)
+        # 不使用代理
+        # r = requests.post(url, params=params)
+
+        # 使用代理
+        r = post(url, params=params)
+
         data_json = r.json()
         temp_df = pd.DataFrame(data_json["rows"])
         big_df = pd.concat(objs=[big_df, temp_df], ignore_index=True)
@@ -148,7 +166,12 @@ def stock_irm_ans_cninfo(symbol: str = "1513586704097333248") -> pd.DataFrame:
     """
     url = "https://irm.cninfo.com.cn/newircs/question/getQuestionDetail"
     params = {"questionId": symbol, "_t": "1691146921"}
-    r = requests.get(url, params=params)
+    # 不使用代理
+    # r = requests.get(url, params=params)
+
+    # 使用代理
+    r = get(url, params=params)
+
     data_json = r.json()
     temp_df = pd.DataFrame.from_dict(data_json["data"], orient="index").T
     if "replyDate" not in temp_df.columns:

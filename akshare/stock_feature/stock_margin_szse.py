@@ -9,7 +9,10 @@ https://www.szse.cn/disclosure/margin/object/index.html
 import warnings
 
 import pandas as pd
-import requests
+# import requests
+
+# 使用代理
+from akshare.request import get
 
 
 def stock_margin_underlying_info_szse(date: str = "20221129") -> pd.DataFrame:
@@ -35,7 +38,12 @@ def stock_margin_underlying_info_szse(date: str = "20221129") -> pd.DataFrame:
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) "
         "Chrome/88.0.4324.150 Safari/537.36",
     }
-    r = requests.get(url, params=params, headers=headers)
+    # 不使用代理
+    # r = requests.get(url, params=params, headers=headers)
+
+    # 使用代理
+    r = get(url, params=params, headers=headers)
+
     with warnings.catch_warnings(record=True):
         warnings.simplefilter("always")
         temp_df = pd.read_excel(r.content, engine="openpyxl", dtype={"证券代码": str})
@@ -64,7 +72,12 @@ def stock_margin_szse(date: str = "20240411") -> pd.DataFrame:
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) "
         "Chrome/88.0.4324.150 Safari/537.36",
     }
-    r = requests.get(url, params=params, headers=headers)
+    # 不使用代理
+    # r = requests.get(url, params=params, headers=headers)
+
+    # 使用代理
+    r = get(url, params=params, headers=headers)
+
     data_json = r.json()
     temp_df = pd.DataFrame(data_json[0]["data"])
     temp_df.columns = [
@@ -113,7 +126,12 @@ def stock_margin_detail_szse(date: str = "20230925") -> pd.DataFrame:
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) "
         "Chrome/88.0.4324.150 Safari/537.36",
     }
-    r = requests.get(url, params=params, headers=headers)
+    # 不使用代理
+    # r = requests.get(url, params=params, headers=headers)
+
+    # 使用代理
+    r = get(url, params=params, headers=headers)
+
     with warnings.catch_warnings(record=True):
         warnings.simplefilter("always")
         temp_df = pd.read_excel(r.content, engine="openpyxl", dtype={"证券代码": str})

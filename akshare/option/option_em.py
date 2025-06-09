@@ -7,7 +7,10 @@ https://quote.eastmoney.com/center/qqsc.html
 """
 
 import pandas as pd
-import requests
+# import requests
+# 使用代理
+from akshare.request import get
+
 from akshare.utils.func import fetch_paginated_data
 
 
@@ -121,7 +124,11 @@ def option_current_cffex_em() -> pd.DataFrame:
         "blockName": "callback",
         "_:": "1706689899924",
     }
-    r = requests.get(url, params=params)
+    # r = requests.get(url, params=params)
+
+    # 使用代理
+    r = get(url=url, params=params)
+
     data_json = r.json()
     temp_df = pd.DataFrame(data_json["list"])
     temp_df.reset_index(inplace=True)

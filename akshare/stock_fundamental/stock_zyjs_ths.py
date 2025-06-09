@@ -7,7 +7,11 @@ https://basic.10jqka.com.cn/new/000066/operate.html
 """
 
 import pandas as pd
-import requests
+# import requests
+
+# 使用代理
+from akshare.request import get
+
 from bs4 import BeautifulSoup
 
 
@@ -25,7 +29,12 @@ def stock_zyjs_ths(symbol: str = "000066") -> pd.DataFrame:
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) "
         "Chrome/109.0.0.0 Safari/537.36"
     }
-    r = requests.get(url, headers=headers)
+    # 不使用代理
+    # r = requests.get(url, headers=headers)
+
+    # 使用代理
+    r = get(url, headers=headers)
+
     r.encoding = "gb2312"
     soup = BeautifulSoup(r.text, "lxml")
     content_list = [

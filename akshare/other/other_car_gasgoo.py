@@ -7,7 +7,10 @@ http://i.gasgoo.com/data/ranking
 """
 
 import pandas as pd
-import requests
+# import requests
+
+# 使用代理
+from akshare.request import post
 
 from akshare.utils import demjson
 
@@ -66,7 +69,12 @@ def car_sale_rank_gasgoo(symbol: str = "车企榜", date: str = "202109") -> pd.
         "Chrome/95.0.4638.69 Safari/537.36",
         "X-Requested-With": "XMLHttpRequest",
     }
-    r = requests.post(url, json=payload, headers=headers)
+    # 不使用代理
+    # r = requests.post(url, json=payload, headers=headers)
+
+    # 使用代理
+    r = post(url, json=payload, headers=headers)
+
     data_json = r.json()
     data_json = demjson.decode(data_json["d"])
     temp_df = pd.DataFrame(data_json)

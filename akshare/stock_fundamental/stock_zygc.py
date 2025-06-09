@@ -7,7 +7,10 @@ https://emweb.securities.eastmoney.com/PC_HSF10/BusinessAnalysis/Index?type=web&
 """
 
 import pandas as pd
-import requests
+# import requests
+
+# 使用代理
+from akshare.request import get
 
 
 def stock_zygc_em(symbol: str = "SH688041") -> pd.DataFrame:
@@ -21,7 +24,12 @@ def stock_zygc_em(symbol: str = "SH688041") -> pd.DataFrame:
     """
     url = "https://emweb.securities.eastmoney.com/PC_HSF10/BusinessAnalysis/PageAjax"
     params = {"code": symbol}
-    r = requests.get(url, params=params)
+    # 不使用代理
+    # r = requests.get(url, params=params)
+
+    # 使用代理
+    r = get(url, params=params)
+
     data_json = r.json()
     temp_df = pd.DataFrame(data_json["zygcfx"])
     temp_df.rename(

@@ -7,7 +7,10 @@ https://emweb.eastmoney.com/PC_USF10/pages/index.html?code=TSLA&type=web&color=w
 """
 
 import pandas as pd
-import requests
+# import requests
+
+# 使用代理
+from akshare.request import get
 
 from akshare.utils.cons import headers
 
@@ -37,7 +40,12 @@ def __stock_financial_us_report_query_market_em(symbol: str = "TSLA") -> str:
         "v": "04406064331266868",
     }
 
-    r = requests.get(url, params=params)
+    # 不使用代理
+    # r = requests.get(url, params=params)
+
+    # 使用代理
+    r = get(url, params=params)
+
     data_json = r.json()
     stock_code = data_json["result"]["data"][0]["SECUCODE"]
     return stock_code
@@ -82,7 +90,12 @@ def __stock_financial_us_report_em(
         "client": "PC",
         "v": "09583551779242467",
     }
-    r = requests.get(url, params=params, headers=headers)
+    # 不使用代理
+    # r = requests.get(url, params=params, headers=headers)
+
+    # 使用代理
+    r = get(url, params=params, headers=headers)
+
     data_json = r.json()
     temp_df = pd.DataFrame(data_json["result"]["data"])
     temp_tuple = tuple(set(temp_df["REPORT"].tolist()))
@@ -146,7 +159,12 @@ def stock_financial_us_report_em(
         "client": "PC",
         "v": "09583551779242467",
     }
-    r = requests.get(url, params=params, headers=headers)
+    # 不使用代理
+    # r = requests.get(url, params=params, headers=headers)
+
+    # 使用代理
+    r = get(url, params=params, headers=headers)
+
     data_json = r.json()
     temp_df = pd.DataFrame(data_json["result"]["data"])
     return temp_df
@@ -193,7 +211,12 @@ def stock_financial_us_analysis_indicator_em(
         )
     else:
         raise ValueError("请输入正确的 indicator 参数")
-    r = requests.get(url, params=params)
+    # 不使用代理
+    # r = requests.get(url, params=params)
+
+    # 使用代理
+    r = get(url, params=params)
+
     data_json = r.json()
     temp_df = pd.DataFrame(data_json["result"]["data"])
     return temp_df

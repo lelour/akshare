@@ -6,7 +6,10 @@ Desc: 中国外汇交易中心暨全国银行间同业拆借中心-回购定盘�
 """
 
 import pandas as pd
-import requests
+# import requests
+
+# 使用代理
+from akshare.request import post
 
 
 def repo_rate_query(symbol: str = "回购定盘利率") -> pd.DataFrame:
@@ -66,7 +69,9 @@ def repo_rate_hist(
         "startDate": start_date,
         "endDate": end_date,
     }
-    r = requests.post(url, params=params, headers=headers)
+    # r = requests.post(url, params=params, headers=headers)
+    r = post(url=url, params=params, headers=headers)
+
     data_json = r.json()
     temp_df = pd.DataFrame(data_json["records"])
     temp_df = pd.DataFrame([item for item in temp_df["frValueMap"].to_list()])

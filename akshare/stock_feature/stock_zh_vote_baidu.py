@@ -6,7 +6,11 @@ Desc: 百度股市通- A 股或指数-股评-投票
 https://gushitong.baidu.com/index/ab-000001
 """
 
-import requests
+# import requests
+
+# 使用代理
+from akshare.request import get
+
 import pandas as pd
 
 
@@ -37,7 +41,12 @@ def stock_zh_vote_baidu(
     temp_list = []
     for item_period in ["day", "week", "month", "year"]:
         params.update({"select_type": item_period})
-        r = requests.get(url, params=params)
+        # 不使用代理
+        # r = requests.get(url, params=params)
+
+        # 使用代理
+        r = get(url, params=params)
+
         data_json = r.json()
         temp_list.append(
             [

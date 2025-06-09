@@ -13,7 +13,10 @@ from io import BytesIO
 from typing import List
 
 import pandas as pd
-import requests
+# import requests
+
+# 使用代理
+from akshare.request import get, post
 
 from akshare.futures import cons
 from akshare.futures.requests_fun import requests_link, pandas_read_html_link
@@ -297,7 +300,11 @@ def get_czce_receipt_2(date: str = None, vars_list: List = cons.contract_symbols
         warnings.warn("%s非交易日" % date.strftime("%Y%m%d"))
         return None
     url = cons.CZCE_RECEIPT_URL_2 % (date[:4], date)
-    r = requests.get(url)
+    # r = requests.get(url)
+
+    # 使用代理
+    r = get(url=url)
+
     r.encoding = "utf-8"
     data = pd.read_html(r.text)[3:]
     records = pd.DataFrame()
@@ -480,7 +487,11 @@ def get_gfex_receipt(
         "X-Requested-With": "XMLHttpRequest",
         "content-type": "application/x-www-form-urlencoded",
     }
-    r = requests.post(url, data=payload, headers=headers)
+    # r = requests.post(url, data=payload, headers=headers)
+
+    # 使用代理
+    r = post(url=url, data=payload, headers=headers)
+
     data_json = r.json()
     temp_df = pd.DataFrame(data_json["data"])
     temp_df = temp_df[temp_df["variety"].str.contains("小计")]

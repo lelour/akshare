@@ -8,7 +8,10 @@ Desc: 债券-集思录-可转债
 
 from io import StringIO
 import pandas as pd
-import requests
+# import requests
+# 使用代理
+from akshare.request import get, post
+
 import time
 
 from akshare.utils import demjson
@@ -22,7 +25,9 @@ def bond_cb_index_jsl() -> pd.DataFrame:
     :rtype: pandas.DataFrame
     """
     url = "https://www.jisilu.cn/webapi/cb/index_history/"
-    r = requests.get(url)
+    # r = requests.get(url)
+    r = get(url)
+
     data_dict = demjson.decode(r.text)["data"]
     temp_df = pd.DataFrame(data_dict)
     return temp_df
@@ -83,7 +88,9 @@ def bond_cb_jsl(cookie: str = None) -> pd.DataFrame:
         "bond_ids": "",
         "rp": "50",
     }
-    r = requests.post(url, params=params, json=payload, headers=headers)
+    # r = requests.post(url, params=params, json=payload, headers=headers)
+    r = post(url, params=params, json=payload, headers=headers)
+
     data_json = r.json()
     temp_df = pd.DataFrame([item["cell"] for item in data_json["rows"]])
     temp_df.rename(
@@ -198,7 +205,9 @@ def bond_cb_redeem_jsl() -> pd.DataFrame:
     payload = {
         "rp": "50",
     }
-    r = requests.post(url, params=params, json=payload, headers=headers)
+    # r = requests.post(url, params=params, json=payload, headers=headers)
+    r = post(url, params=params, json=payload, headers=headers)
+
     data_json = r.json()
     temp_df = pd.DataFrame([item["cell"] for item in data_json["rows"]])
     temp_df.rename(
@@ -304,7 +313,9 @@ def bond_cb_adj_logs_jsl(symbol: str = "128013") -> pd.DataFrame:
     :rtype: pandas.DataFrame
     """
     url = f"https://www.jisilu.cn/data/cbnew/adj_logs/?bond_id={symbol}"
-    r = requests.get(url)
+    # r = requests.get(url)
+    r = get(url)
+
     data_text = r.text
     if "</table>" not in data_text:
         # 1. 该可转债没有转股价调整记录，服务端返回文本 '暂无数据'

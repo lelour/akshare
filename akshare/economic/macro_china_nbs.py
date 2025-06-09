@@ -13,7 +13,11 @@ from typing import Union, Literal, List, Dict
 import jsonpath as jp
 import numpy as np
 import pandas as pd
-import requests
+# import requests
+
+# 使用代理
+from akshare.request import post, get
+
 import urllib3
 from urllib3.exceptions import InsecureRequestWarning
 
@@ -31,7 +35,9 @@ def _get_nbs_tree(idcode: str, dbcode: str) -> List[Dict]:
     """
     url = "https://data.stats.gov.cn/easyquery.htm"
     params = {"id": idcode, "dbcode": dbcode, "wdcode": "zb", "m": "getTree"}
-    r = requests.post(url, params=params, verify=False, allow_redirects=True)
+    # r = requests.post(url, params=params, verify=False, allow_redirects=True)
+    r = post(url, params=params, verify=False, allow_redirects=True)
+
     data_json = r.json()
     return data_json
 
@@ -54,7 +60,9 @@ def _get_nbs_wds_tree(idcode: str, dbcode: str, rowcode: str) -> List[Dict]:
         "wds": '[{"wdcode":"zb","valuecode":"%s"}]' % idcode,
         "k1": str(time.time_ns())[:13],
     }
-    r = requests.post(url, params=params, verify=False, allow_redirects=True)
+    # r = requests.post(url, params=params, verify=False, allow_redirects=True)
+    r = post(url, params=params)
+
     data_json = r.json()
     data_json = data_json["returndata"][0]["nodes"]
     return data_json
@@ -113,7 +121,9 @@ def macro_china_nbs_nation(
         '{"wdcode":"sj","valuecode":"%s"}]' % (indicator_id, period),
         "k1": str(time.time_ns())[:13],
     }
-    r = requests.get(url, params=params, verify=False, allow_redirects=True)
+    # r = requests.get(url, params=params, verify=False, allow_redirects=True)
+    r = get(url, params=params, verify=False, allow_redirects=True)
+
     data_json = r.json()
 
     # 整理为dataframe
@@ -232,7 +242,9 @@ def macro_china_nbs_region(
         "dfwds": dfwds,
         "k1": str(time.time_ns())[:13],
     }
-    r = requests.get(url, params=params, verify=False, allow_redirects=True)
+    # r = requests.get(url, params=params, verify=False, allow_redirects=True)
+    r = get(url, params=params, verify=False, allow_redirects=True)
+
     data_json = r.json()
 
     # 整理为dataframe

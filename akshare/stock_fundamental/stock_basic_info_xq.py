@@ -7,7 +7,10 @@ https://xueqiu.com/snowman/S/SH601127/detail#/GSJJ
 """
 
 import pandas as pd
-import requests
+# import requests
+
+# 使用代理
+from akshare.request import get
 
 from akshare.utils.cons import headers
 
@@ -34,7 +37,12 @@ def stock_individual_basic_info_xq(
         "symbol": symbol,
     }
     headers.update({"cookie": f"xq_a_token={xq_a_token};"})
-    r = requests.get(url, params=params, headers=headers, timeout=timeout)
+    # 不使用代理
+    # r = requests.get(url, params=params, headers=headers, timeout=timeout)
+
+    # 使用代理
+    r = get(url, params=params, headers=headers, timeout=timeout)
+
     data_json = r.json()
     temp_df = pd.DataFrame(data_json["data"])
     temp_df.reset_index(inplace=True)
@@ -64,7 +72,12 @@ def stock_individual_basic_info_us_xq(
         "symbol": symbol,
     }
     headers.update({"cookie": f"xq_a_token={xq_a_token};"})
-    r = requests.get(url, params=params, headers=headers, timeout=timeout)
+    # 不使用代理
+    # r = requests.get(url, params=params, headers=headers, timeout=timeout)
+
+    # 使用代理
+    r = get(url, params=params, headers=headers, timeout=timeout)
+
     data_json = r.json()
     temp_df = pd.DataFrame(data_json["data"])
     temp_df.reset_index(inplace=True)
@@ -94,7 +107,12 @@ def stock_individual_basic_info_hk_xq(
         "symbol": symbol,
     }
     headers.update({"cookie": f"xq_a_token={xq_a_token};"})
-    r = requests.get(url, params=params, headers=headers, timeout=timeout)
+    # 不使用代理
+    # r = requests.get(url, params=params, headers=headers, timeout=timeout)
+
+    # 使用代理
+    r = get(url, params=params, headers=headers, timeout=timeout)
+
     data_json = r.json()
     temp_df = pd.DataFrame(data_json["data"])
     temp_df.reset_index(inplace=True)

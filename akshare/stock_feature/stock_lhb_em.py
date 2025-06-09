@@ -7,7 +7,11 @@ https://data.eastmoney.com/stock/tradedetail.html
 """
 
 import pandas as pd
-import requests
+# import requests
+
+# 使用代理
+from akshare.request import get
+
 from akshare.utils.tqdm import get_tqdm
 
 
@@ -41,7 +45,12 @@ def stock_lhb_detail_em(
         "client": "WEB",
         "filter": f"(TRADE_DATE<='{end_date}')(TRADE_DATE>='{start_date}')",
     }
-    r = requests.get(url, params=params)
+    # 不使用代理
+    # r = requests.get(url, params=params)
+
+    # 使用代理
+    r = get(url, params=params)
+
     data_json = r.json()
     total_page_num = data_json["result"]["pages"]
     big_df = pd.DataFrame()
@@ -52,7 +61,12 @@ def stock_lhb_detail_em(
                 "pageNumber": page,
             }
         )
-        r = requests.get(url, params=params)
+        # 不使用代理
+        # r = requests.get(url, params=params)
+
+        # 使用代理
+        r = get(url, params=params)
+
         data_json = r.json()
         temp_df = pd.DataFrame(data_json["result"]["data"])
         big_df = pd.concat([big_df, temp_df], ignore_index=True)
@@ -161,7 +175,12 @@ def stock_lhb_stock_statistic_em(symbol: str = "近一月") -> pd.DataFrame:
         "client": "WEB",
         "filter": f'(STATISTICS_CYCLE="{symbol_map[symbol]}")',
     }
-    r = requests.get(url, params=params)
+    # 不使用代理
+    # r = requests.get(url, params=params)
+
+    # 使用代理
+    r = get(url, params=params)
+
     data_json = r.json()
     temp_df = pd.DataFrame(data_json["result"]["data"])
     temp_df.reset_index(inplace=True)
@@ -250,7 +269,12 @@ def stock_lhb_jgmmtj_em(
         "client": "WEB",
         "filter": f"(TRADE_DATE>='{start_date}')(TRADE_DATE<='{end_date}')",
     }
-    r = requests.get(url, params=params)
+    # 不使用代理
+    # r = requests.get(url, params=params)
+
+    # 使用代理
+    r = get(url, params=params)
+
     data_json = r.json()
     total_page = data_json["result"]["pages"]
     big_df = pd.DataFrame()
@@ -261,7 +285,12 @@ def stock_lhb_jgmmtj_em(
                 "pageNumber": page,
             }
         )
-        r = requests.get(url, params=params)
+        # 不使用代理
+        # r = requests.get(url, params=params)
+
+        # 使用代理
+        r = get(url, params=params)
+
         data_json = r.json()
         temp_df = pd.DataFrame(data_json["result"]["data"])
         big_df = pd.concat(objs=[big_df, temp_df], ignore_index=True)
@@ -359,14 +388,24 @@ def stock_lhb_jgstatistic_em(symbol: str = "近一月") -> pd.DataFrame:
         "client": "WEB",
         "filter": f'(STATISTICSCYCLE="{symbol_map[symbol]}")',
     }
-    r = requests.get(url, params=params)
+    # 不使用代理
+    # r = requests.get(url, params=params)
+
+    # 使用代理
+    r = get(url, params=params)
+
     data_json = r.json()
     total_page = data_json["result"]["pages"]
     big_df = pd.DataFrame()
     tqdm = get_tqdm()
     for page in tqdm(range(1, total_page + 1), leave=False):
         params.update({"pageNumber": page})
-        r = requests.get(url, params=params)
+        # 不使用代理
+        # r = requests.get(url, params=params)
+
+        # 使用代理
+        r = get(url, params=params)
+
         data_json = r.json()
         temp_df = pd.DataFrame(data_json["result"]["data"])
         big_df = pd.concat(objs=[big_df, temp_df], ignore_index=True)
@@ -457,14 +496,24 @@ def stock_lhb_hyyyb_em(
         "client": "WEB",
         "filter": f"(ONLIST_DATE>='{start_date}')(ONLIST_DATE<='{end_date}')",
     }
-    r = requests.get(url, params=params)
+    # 不使用代理
+    # r = requests.get(url, params=params)
+
+    # 使用代理
+    r = get(url, params=params)
+
     data_json = r.json()
     total_page = data_json["result"]["pages"]
     big_df = pd.DataFrame()
     tqdm = get_tqdm()
     for page in tqdm(range(1, total_page + 1), leave=False):
         params.update({"pageNumber": page})
-        r = requests.get(url, params=params)
+        # 不使用代理
+        # r = requests.get(url, params=params)
+
+        # 使用代理
+        r = get(url, params=params)
+
         data_json = r.json()
         temp_df = pd.DataFrame(data_json["result"]["data"])
         big_df = pd.concat(objs=[big_df, temp_df], ignore_index=True)
@@ -536,14 +585,24 @@ def stock_lhb_yybph_em(symbol: str = "近一月") -> pd.DataFrame:
         "client": "WEB",
         "filter": f'(STATISTICSCYCLE="{symbol_map[symbol]}")',
     }
-    r = requests.get(url, params=params)
+    # 不使用代理
+    # r = requests.get(url, params=params)
+
+    # 使用代理
+    r = get(url, params=params)
+
     data_json = r.json()
     total_page = data_json["result"]["pages"]
     big_df = pd.DataFrame()
     tqdm = get_tqdm()
     for page in tqdm(range(1, total_page + 1), leave=False):
         params.update({"pageNumber": page})
-        r = requests.get(url, params=params)
+        # 不使用代理
+        # r = requests.get(url, params=params)
+
+        # 使用代理
+        r = get(url, params=params)
+
         data_json = r.json()
         temp_df = pd.DataFrame(data_json["result"]["data"])
         big_df = pd.concat(objs=[big_df, temp_df], ignore_index=True)
@@ -672,14 +731,24 @@ def stock_lhb_traderstatistic_em(symbol: str = "近一月") -> pd.DataFrame:
         "client": "WEB",
         "filter": f'(STATISTICSCYCLE="{symbol_map[symbol]}")',
     }
-    r = requests.get(url, params=params)
+    # 不使用代理
+    # r = requests.get(url, params=params)
+
+    # 使用代理
+    r = get(url, params=params)
+
     data_json = r.json()
     total_page = data_json["result"]["pages"]
     big_df = pd.DataFrame()
     tqdm = get_tqdm()
     for page in tqdm(range(1, total_page + 1), leave=False):
         params.update({"pageNumber": page})
-        r = requests.get(url, params=params)
+        # 不使用代理
+        # r = requests.get(url, params=params)
+
+        # 使用代理
+        r = get(url, params=params)
+
         data_json = r.json()
         temp_df = pd.DataFrame(data_json["result"]["data"])
         big_df = pd.concat(objs=[big_df, temp_df], ignore_index=True)
@@ -741,7 +810,12 @@ def stock_lhb_stock_detail_date_em(symbol: str = "600077") -> pd.DataFrame:
         "source": "WEB",
         "client": "WEB",
     }
-    r = requests.get(url, params=params)
+    # 不使用代理
+    # r = requests.get(url, params=params)
+
+    # 使用代理
+    r = get(url, params=params)
+
     data_json = r.json()
     temp_df = pd.DataFrame(data_json["result"]["data"])
     temp_df.reset_index(inplace=True)
@@ -798,7 +872,12 @@ def stock_lhb_stock_detail_em(
         "source": "WEB",
         "client": "WEB",
     }
-    r = requests.get(url, params=params)
+    # 不使用代理
+    # r = requests.get(url, params=params)
+
+    # 使用代理
+    r = get(url, params=params)
+
     data_json = r.json()
     temp_df = pd.DataFrame(data_json["result"]["data"])
     temp_df.reset_index(inplace=True)
@@ -922,14 +1001,24 @@ def stock_lhb_yyb_detail_em(symbol: str = "10188715") -> pd.DataFrame:
         "client": "WEB",
         "filter": f'(OPERATEDEPT_CODE="{symbol}")',
     }
-    r = requests.get(url, params=params)
+    # 不使用代理
+    # r = requests.get(url, params=params)
+
+    # 使用代理
+    r = get(url, params=params)
+
     data_json = r.json()
     total_page = data_json["result"]["pages"]
     big_df = pd.DataFrame()
     tqdm = get_tqdm()
     for page in tqdm(range(1, total_page + 1), leave=False):
         params.update({"pageNumber": page})
-        r = requests.get(url, params=params)
+        # 不使用代理
+        # r = requests.get(url, params=params)
+
+        # 使用代理
+        r = get(url, params=params)
+
         data_json = r.json()
         temp_df = pd.DataFrame(data_json["result"]["data"])
         big_df = pd.concat(objs=[big_df, temp_df], ignore_index=True)

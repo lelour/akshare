@@ -7,7 +7,10 @@ https://xueqiu.com/hq/insider
 """
 
 import pandas as pd
-import requests
+# import requests
+
+# 使用代理
+from akshare.request import get
 
 
 def stock_inner_trade_xq() -> pd.DataFrame:
@@ -42,7 +45,12 @@ def stock_inner_trade_xq() -> pd.DataFrame:
         "Chrome/100.0.4896.127 Safari/537.36",
         "X-Requested-With": "XMLHttpRequest",
     }
-    r = requests.get(url, params=params, headers=headers)
+    # 不使用代理
+    # r = requests.get(url, params=params, headers=headers)
+
+    # 使用代理
+    r = get(url, params=params, headers=headers)
+
     data_json = r.json()
     temp_df = pd.DataFrame(data_json["data"]["items"])
     temp_df.columns = [

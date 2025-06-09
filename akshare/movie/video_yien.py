@@ -13,8 +13,11 @@ import json
 import os
 
 import pandas as pd
-import requests
+# import requests
 import py_mini_racer
+
+# 使用代理
+from akshare.request import post
 
 
 def _get_js_path(name: str = "", module_file: str = "") -> str:
@@ -71,7 +74,11 @@ def video_tv() -> pd.DataFrame:
     """
     url = "https://www.endata.com.cn/API/GetData.ashx"
     payload = {"tvType": 2, "MethodName": "BoxOffice_GetTvData_PlayIndexRank"}
-    r = requests.post(url, data=payload)
+    # r = requests.post(url, data=payload)
+
+    # 使用代理
+    r = post(url=url, data=payload)
+
     r.encoding = "utf8"
     data_json = json.loads(decrypt(r.text))
     temp_df = pd.DataFrame(data_json["Data"]["Table"])
@@ -102,7 +109,11 @@ def video_variety_show() -> pd.DataFrame:
     """
     url = "https://www.endata.com.cn/API/GetData.ashx"
     payload = {"tvType": 8, "MethodName": "BoxOffice_GetTvData_PlayIndexRank"}
-    r = requests.post(url, data=payload)
+    # r = requests.post(url, data=payload)
+
+    # 使用代理
+    r = post(url=url, data=payload)
+
     r.encoding = "utf8"
     data_json = json.loads(decrypt(r.text))
     temp_df = pd.DataFrame(data_json["Data"]["Table"])

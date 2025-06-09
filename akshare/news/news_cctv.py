@@ -9,7 +9,10 @@ https://tv.cctv.com/lm/xwlb
 import re
 
 import pandas as pd
-import requests
+# import requests
+# 使用代理
+from akshare.request import get
+
 from bs4 import BeautifulSoup
 from tqdm import tqdm
 
@@ -25,7 +28,11 @@ def news_cctv(date: str = "20240424") -> pd.DataFrame:
     """
     if int(date) <= int("20130708"):
         url = f"https://cctv.cntv.cn/lm/xinwenlianbo/{date}.shtml"
-        r = requests.get(url)
+        # r = requests.get(url)
+
+        # 使用代理
+        r = get(url=url)
+
         r.encoding = "gbk"
         raw_list = re.findall(r"title_array_01\((.*)", r.text)
         page_url = [
@@ -73,7 +80,11 @@ def news_cctv(date: str = "20240424") -> pd.DataFrame:
 
     elif int(date) < int("20160203"):
         url = f"https://cctv.cntv.cn/lm/xinwenlianbo/{date}.shtml"
-        r = requests.get(url)
+        # r = requests.get(url)
+
+        # 使用代理
+        r = get(url=url)
+
         r.encoding = "utf-8"
         soup = BeautifulSoup(r.text, "lxml")
         page_url = [
@@ -100,7 +111,11 @@ def news_cctv(date: str = "20240424") -> pd.DataFrame:
         }
         for page in tqdm(page_url, leave=False):
             try:
-                r = requests.get(page, headers=headers)
+                # r = requests.get(page, headers=headers)
+
+                # 使用代理
+                r = get(url=page, headers=headers)
+
                 r.encoding = "utf-8"
                 soup = BeautifulSoup(r.text, features="lxml")
                 title = soup.find("h3").text
@@ -123,7 +138,11 @@ def news_cctv(date: str = "20240424") -> pd.DataFrame:
         return temp_df
     elif int(date) > int("20160203"):
         url = f"https://tv.cctv.com/lm/xwlb/day/{date}.shtml"
-        r = requests.get(url)
+        # r = requests.get(url)
+
+        # 使用代理
+        r = get(url=url)
+
         r.encoding = "utf-8"
         soup = BeautifulSoup(r.text, "lxml")
         page_url = [item.find("a")["href"] for item in soup.find_all("li")[1:]]
@@ -145,7 +164,11 @@ def news_cctv(date: str = "20240424") -> pd.DataFrame:
         }
         for page in tqdm(page_url, leave=False):
             try:
-                r = requests.get(page, headers=headers)
+                # r = requests.get(page, headers=headers)
+
+                # 使用代理
+                r = get(url=page, headers=headers)
+
                 r.encoding = "utf-8"
                 soup = BeautifulSoup(r.text, features="lxml")
                 if soup.find("h3"):

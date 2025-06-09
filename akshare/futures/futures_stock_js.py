@@ -8,7 +8,10 @@ https://tsite.shfe.com.cn/statements/dataview.html?paramid=kx
 """
 
 import pandas as pd
-import requests
+# import requests
+
+# 使用代理
+from akshare.request import get
 
 
 def futures_stock_shfe_js(date: str = "20240419") -> pd.DataFrame:
@@ -33,7 +36,11 @@ def futures_stock_shfe_js(date: str = "20240419") -> pd.DataFrame:
         "date": "-".join([date[:4], date[4:6], date[6:]]),
         "attr_id": "1",
     }
-    r = requests.get(url, params=params, headers=headers)
+    # r = requests.get(url, params=params, headers=headers)
+
+    # 使用代理
+    r = get(url=url, params=params, headers=headers)
+
     data_json = r.json()
     columns_list = [item["name"] for item in data_json["data"]["keys"]]
     temp_df = pd.DataFrame(data_json["data"]["values"], columns=columns_list)

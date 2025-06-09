@@ -7,7 +7,10 @@ https://data.eastmoney.com/ifdata/xhgp.html
 """
 
 import pandas as pd
-import requests
+# import requests
+
+# 使用代理
+from akshare.request import get
 
 from akshare.utils import demjson
 
@@ -45,7 +48,11 @@ def futures_spot_stock(symbol: str = "能源") -> pd.DataFrame:
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
         "(KHTML, like Gecko) Chrome/90.0.4430.212 Safari/537.36",
     }
-    r = requests.get(url, headers=headers)
+    # r = requests.get(url, headers=headers)
+
+    # 使用代理
+    r = get(url=url, headers=headers)
+
     data_text = r.text
     temp_json = demjson.decode(
         data_text[

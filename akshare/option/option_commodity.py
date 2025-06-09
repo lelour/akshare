@@ -20,7 +20,10 @@ from io import StringIO, BytesIO
 from typing import Tuple, Any, Optional
 
 import pandas as pd
-import requests
+# import requests
+
+# 使用代理
+from akshare.request import get, post
 
 from akshare.option.cons import (
     get_calendar,
@@ -61,7 +64,10 @@ def option_dce_daily(
         "day": str(day.day),
         "exportFlag": "excel",
     }
-    res = requests.post(url, data=payload)
+    # res = requests.post(url, data=payload)
+    # 使用代理
+    res = post(url=url, data=payload)
+
     table_df = pd.read_excel(BytesIO(res.content), header=1)
     # 从合约名称中提取合约系列, 例如: "c2001-C-1680" -> "c2001". 然后去重, 保留隐含波动率.
     another_df = table_df["合约名称"].str.extract(r"([a-zA-Z]+[0-9]+)")
@@ -223,7 +229,9 @@ def option_czce_daily(
     if day > datetime.date(year=2010, month=8, day=24):
         url = CZCE_DAILY_OPTION_URL_3.format(day.strftime("%Y"), day.strftime("%Y%m%d"))
         try:
-            r = requests.get(url)
+            # r = requests.get(url)
+            r = get(url=url)
+
             f = StringIO(r.text)
             table_df = pd.read_table(f, encoding="utf-8", skiprows=1, sep="|")
             table_df.columns = [
@@ -394,7 +402,9 @@ def option_shfe_daily(
     if day > datetime.date(year=2010, month=8, day=24):
         url = f"""https://www.shfe.com.cn/data/tradedata/option/dailydata/kx{day.strftime("%Y%m%d")}.dat"""
         try:
-            r = requests.get(url, headers=SHFE_HEADERS)
+            # r = requests.get(url, headers=SHFE_HEADERS)
+            r = get(url=url, headers=SHFE_HEADERS)
+
             json_data = r.json()
             table_df = pd.DataFrame(
                 [
@@ -511,7 +521,9 @@ def option_gfex_daily(symbol: str = "工业硅", trade_date: str = "20230724"):
         "X-Requested-With": "XMLHttpRequest",
         "content-type": "application/x-www-form-urlencoded",
     }
-    r = requests.post(url, data=payload, headers=headers)
+    # r = requests.post(url, data=payload, headers=headers)
+    r = post(url=url, data=payload, headers=headers)
+
     data_json = r.json()
     temp_df = pd.DataFrame(data_json["data"])
     temp_df.rename(
@@ -603,7 +615,9 @@ def option_gfex_vol_daily(symbol: str = "碳酸锂", trade_date: str = "20230724
         "X-Requested-With": "XMLHttpRequest",
         "content-type": "application/x-www-form-urlencoded",
     }
-    r = requests.post(url, data=payload, headers=headers)
+    # r = requests.post(url, data=payload, headers=headers)
+    r = post(url=url, data=payload, headers=headers)
+
     data_json = r.json()
     temp_df = pd.DataFrame(data_json["data"])
     temp_df.rename(

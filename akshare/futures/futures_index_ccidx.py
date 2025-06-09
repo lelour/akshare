@@ -9,7 +9,10 @@ http://www.ccidx.com/
 import json
 
 import pandas as pd
-import requests
+# import requests
+
+# 使用代理
+from akshare.request import get, post
 
 
 def futures_index_ccidx(symbol: str = "中证商品期货指数") -> pd.DataFrame:
@@ -27,7 +30,11 @@ def futures_index_ccidx(symbol: str = "中证商品期货指数") -> pd.DataFram
     }
     url = "http://www.ccidx.com/CCI-ZZZS/index/getDateLine"
     params = {"indexId": futures_index_map[symbol]}
-    r = requests.get(url, params=params)
+    # r = requests.get(url, params=params)
+
+    # 使用代理
+    r = get(url=url, params=params)
+
     data_json = r.json()
     temp_df = pd.DataFrame(
         [json.loads(item) for item in data_json["data"]["dateLineJson"]]
@@ -96,7 +103,11 @@ def futures_index_min_ccidx(symbol: str = "中证监控油脂油料期货指数"
         "Chrome/92.0.4515.159 Safari/537.36",
         "X-Requested-With": "XMLHttpRequest",
     }
-    r = requests.post(url, params=params, data=payload, headers=headers)
+    # r = requests.post(url, params=params, data=payload, headers=headers)
+
+    # 使用代理
+    r = post(url=url, params=params, data=payload, headers=headers)
+
     data_json = r.json()
     temp_df = pd.DataFrame(
         [data_json["dataMap"]["axisList"], data_json["dataMap"]["lineList"]]

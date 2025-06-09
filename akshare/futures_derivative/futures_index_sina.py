@@ -9,7 +9,9 @@ https://finance.sina.com.cn/futuremarket/index.shtml
 from io import StringIO
 
 import pandas as pd
-import requests
+# import requests
+# 使用代理
+from akshare.request import get
 
 from akshare.futures.cons import (
     zh_subscribe_exchange_symbol_url,
@@ -28,7 +30,11 @@ def zh_subscribe_exchange_symbol(symbol: str = "dce") -> pd.DataFrame:
     :return: 订阅指定交易所品种的代码
     :rtype: pandas.DataFrame
     """
-    r = requests.get(zh_subscribe_exchange_symbol_url)
+    # r = requests.get(zh_subscribe_exchange_symbol_url)
+
+    # 使用代理
+    r = get(url=zh_subscribe_exchange_symbol_url)
+
     r.encoding = "gb2312"
     data_text = r.text
     data_json = demjson.decode(
@@ -64,9 +70,15 @@ def match_main_contract(symbol: str = "shfe") -> pd.DataFrame:
     exchange_symbol_list = zh_subscribe_exchange_symbol(symbol).iloc[:, 1].tolist()
     for item in exchange_symbol_list:
         zh_match_main_contract_payload.update({"node": item})
-        res = requests.get(
-            zh_match_main_contract_url, params=zh_match_main_contract_payload
-        )
+
+        # 不使用代理
+        # res = requests.get(
+        #     zh_match_main_contract_url, params=zh_match_main_contract_payload
+        # )
+
+        # 使用代理
+        res = get(url=zh_match_main_contract_url, params=zh_match_main_contract_payload)
+
         data_json = demjson.decode(res.text)
         data_df = pd.DataFrame(data_json)
         try:
@@ -120,7 +132,11 @@ def futures_main_sina(
     trade_date = "20210817"
     trade_date = trade_date[:4] + "_" + trade_date[4:6] + "_" + trade_date[6:]
     url = f"https://stock2.finance.sina.com.cn/futures/api/jsonp.php/var%20_{symbol}{trade_date}=/InnerFuturesNewService.getDailyKLine?symbol={symbol}&_={trade_date}"
-    r = requests.get(url)
+    # r = requests.get(url)
+
+    # 使用代理
+    r = get(url=url)
+
     data_text = r.text
     data_json = data_text[data_text.find("([") + 1 : data_text.rfind("])") + 1]
     temp_df = pd.read_json(StringIO(data_json))

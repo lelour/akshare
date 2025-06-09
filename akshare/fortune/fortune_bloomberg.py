@@ -7,7 +7,11 @@ https://www.bloomberg.com/billionaires/
 """
 
 import pandas as pd
-import requests
+# import requests
+
+# 使用代理
+from akshare.request import get
+
 from bs4 import BeautifulSoup
 
 
@@ -21,7 +25,11 @@ def index_bloomberg_billionaires_hist(year: str = "2021") -> pd.DataFrame:
     :rtype: pandas.DataFrame
     """
     url = f"https://stats.areppim.com/listes/list_billionairesx{year[-2:]}xwor.htm"
-    r = requests.get(url)
+    # r = requests.get(url)
+
+    # 使用代理
+    r = get(url=url)
+
     soup = BeautifulSoup(r.text, "lxml")
     trs = soup.findAll("table")[0].findAll("tr")
     heads = trs[1]
@@ -84,7 +92,11 @@ def index_bloomberg_billionaires() -> pd.DataFrame:
         "referer": "https://www.bloomberg.com/",
         "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.116 Safari/537.36",
     }
-    r = requests.get(url, headers=headers)
+    # r = requests.get(url, headers=headers)
+
+    # 使用代理
+    r = get(url=url, headers=headers)
+
     soup = BeautifulSoup(r.text, "lxml")
     big_content_list = list()
     soup_node = soup.find(attrs={"class": "table-chart"}).find_all(

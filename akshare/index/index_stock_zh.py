@@ -12,7 +12,10 @@ import re
 
 import pandas as pd
 import py_mini_racer
-import requests
+# import requests
+
+# 使用代理
+from akshare.request import get
 
 from akshare.index.cons import (
     zh_sina_index_stock_payload,
@@ -47,7 +50,12 @@ def get_zh_index_page_count() -> int:
     :return: 需要抓取的指数的总页数
     :rtype: int
     """
-    res = requests.get(zh_sina_index_stock_count_url)
+    # 不使用代理
+    # res = requests.get(zh_sina_index_stock_count_url)
+
+    # 使用代理
+    res = get(zh_sina_index_stock_count_url)
+
     page_count = int(re.findall(re.compile(r"\d+"), res.text)[0]) / 80
     if isinstance(page_count, int):
         return page_count
@@ -69,7 +77,9 @@ def stock_zh_index_spot_sina() -> pd.DataFrame:
     tqdm = get_tqdm()
     for page in tqdm(range(1, page_count + 1), leave=False):
         zh_sina_stock_payload_copy.update({"page": page})
-        res = requests.get(zh_sina_index_stock_url, params=zh_sina_stock_payload_copy)
+        # res = requests.get(zh_sina_index_stock_url, params=zh_sina_stock_payload_copy)
+        res = get(zh_sina_index_stock_url, params=zh_sina_stock_payload_copy)
+
         data_json = demjson.decode(res.text)
         big_df = pd.concat(objs=[big_df, pd.DataFrame(data_json)], ignore_index=True)
     big_df = big_df.map(_replace_comma)
@@ -149,7 +159,12 @@ def __stock_zh_main_spot_em() -> pd.DataFrame:
         "fields": "f1,f2,f3,f4,f5,f6,f7,f8,f9,f10,f12,f13,f14,f15,f16,f17,f18,f20,f21,"
         "f23,f24,f25,f26,f22,f11,f62,f128,f136,f115,f152",
     }
-    r = requests.get(url, params=params)
+    # 不使用代理
+    # r = requests.get(url, params=params)
+
+    # 使用代理
+    r = get(url, params=params)
+
     data_json = r.json()
     temp_df = pd.DataFrame(data_json["data"]["diff"])
     temp_df.reset_index(inplace=True)
@@ -300,7 +315,9 @@ def stock_zh_index_daily(symbol: str = "sh000922") -> pd.DataFrame:
     :rtype: pandas.DataFrame
     """
     params = {"d": "2020_2_4"}
-    res = requests.get(zh_sina_index_stock_hist_url.format(symbol), params=params)
+    # res = requests.get(zh_sina_index_stock_hist_url.format(symbol), params=params)
+    res = get(zh_sina_index_stock_hist_url.format(symbol), params=params)
+
     js_code = py_mini_racer.MiniRacer()
     js_code.eval(hk_js_decode)
     dict_list = js_code.call(
@@ -332,7 +349,9 @@ def get_tx_start_year(symbol: str = "sh000919") -> str:
         "_var": "trend_qfq",
         "r": "0.3506048543943414",
     }
-    r = requests.get(url, params=params)
+    # r = requests.get(url, params=params)
+    r = get(url, params=params)
+
     data_text = r.text
     if not demjson.decode(data_text[data_text.find("={") + 1 :])["data"]:
         url = "https://proxy.finance.qq.com/ifzqgtimg/appstock/app/newfqkline/get"
@@ -341,7 +360,9 @@ def get_tx_start_year(symbol: str = "sh000919") -> str:
             "param": f"{symbol},day,,,320,qfq",
             "r": "0.751892490072597",
         }
-        r = requests.get(url, params=params)
+        # r = requests.get(url, params=params)
+        r = get(url, params=params)
+
         data_text = r.text
         start_date = demjson.decode(data_text[data_text.find("={") + 1 :])["data"][
             symbol
@@ -374,7 +395,9 @@ def stock_zh_index_daily_tx(symbol: str = "sz980017") -> pd.DataFrame:
             "param": f"{symbol},day,{year}-01-01,{year + 1}-12-31,640,qfq",
             "r": "0.8205512681390605",
         }
-        res = requests.get(url, params=params)
+        # res = requests.get(url, params=params)
+        res = get(url, params=params)
+
         text = res.text
         try:
             inner_temp_df = pd.DataFrame(
@@ -437,7 +460,9 @@ def stock_zh_index_daily_em(
         "beg": start_date,
         "end": end_date,
     }
-    r = requests.get(url, params=params)
+    # r = requests.get(url, params=params)
+    r = get(url, params=params)
+
     data_text = r.text
     data_json = demjson.decode(data_text[data_text.find("{") : -2])
     temp_df = pd.DataFrame([item.split(",") for item in data_json["data"]["klines"]])

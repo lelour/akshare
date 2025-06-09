@@ -9,7 +9,10 @@ https://quote.eastmoney.com/sh513500.html
 from functools import lru_cache
 
 import pandas as pd
-import requests
+# import requests
+
+# 使用代理
+from akshare.request import get
 
 from akshare.utils.func import fetch_paginated_data
 
@@ -256,17 +259,29 @@ def fund_etf_hist_em(
     try:
         market_id = code_id_dict[symbol]
         params.update({"secid": f"{market_id}.{symbol}"})
-        r = requests.get(url, timeout=15, params=params)
+        # r = requests.get(url, timeout=15, params=params)
+
+        # 使用代理
+        r = get(url=url, timeout=15, params=params)
+
         data_json = r.json()
     except KeyError:
         market_id = 1
         params.update({"secid": f"{market_id}.{symbol}"})
-        r = requests.get(url, timeout=15, params=params)
+        # r = requests.get(url, timeout=15, params=params)
+
+        # 使用代理
+        r = get(url=url, timeout=15, params=params)
+
         data_json = r.json()
         if not data_json["data"]:
             market_id = 0
             params.update({"secid": f"{market_id}.{symbol}"})
-            r = requests.get(url, timeout=15, params=params)
+            # r = requests.get(url, timeout=15, params=params)
+
+            # 使用代理
+            r = get(url=url, timeout=15, params=params)
+
             data_json = r.json()
     if not (data_json["data"] and data_json["data"]["klines"]):
         return pd.DataFrame()
@@ -349,7 +364,11 @@ def fund_etf_hist_min_em(
             "iscr": "0",
             "secid": f"{code_id_dict[symbol]}.{symbol}",
         }
-        r = requests.get(url, timeout=15, params=params)
+        # r = requests.get(url, timeout=15, params=params)
+
+        # 使用代理
+        r = get(url=url, timeout=15, params=params)
+
         data_json = r.json()
         temp_df = pd.DataFrame(
             [item.split(",") for item in data_json["data"]["trends"]]
@@ -388,7 +407,11 @@ def fund_etf_hist_min_em(
             "beg": "0",
             "end": "20500000",
         }
-        r = requests.get(url, timeout=15, params=params)
+        # r = requests.get(url, timeout=15, params=params)
+
+        # 使用代理
+        r = get(url=url, timeout=15, params=params)
+
         data_json = r.json()
         temp_df = pd.DataFrame(
             [item.split(",") for item in data_json["data"]["klines"]]

@@ -7,7 +7,11 @@ https://data.eastmoney.com/shibor/shibor.aspx
 """
 
 import pandas as pd
-import requests
+# import requests
+
+# 使用代理
+from akshare.request import get
+
 from akshare.utils.tqdm import get_tqdm
 
 
@@ -86,7 +90,11 @@ def rate_interbank(
         "pageNo": "1",
         "pageNum": "1",
     }
-    r = requests.get(url, params=params)
+    # r = requests.get(url, params=params)
+
+    # 使用代理
+    r = get(url=url, params=params)
+
     data_json = r.json()
     total_page = data_json["result"]["pages"]
     big_df = pd.DataFrame()
@@ -100,7 +108,11 @@ def rate_interbank(
                 "pageNum": page,
             }
         )
-        r = requests.get(url, params=params)
+        # r = requests.get(url, params=params)
+
+        # 使用代理
+        r = get(url=url, params=params)
+
         data_json = r.json()
         temp_df = pd.DataFrame(data_json["result"]["data"])
         big_df = pd.concat(objs=[big_df, temp_df], ignore_index=True)

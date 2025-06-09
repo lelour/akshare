@@ -9,7 +9,10 @@ http://www.cffex.com.cn/jycs/
 import xml.etree.ElementTree as ET
 
 import pandas as pd
-import requests
+# import requests
+
+# 使用代理
+from akshare.request import get
 
 
 def futures_contract_info_cffex(date: str = "20240228") -> pd.DataFrame:
@@ -23,7 +26,11 @@ def futures_contract_info_cffex(date: str = "20240228") -> pd.DataFrame:
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36",
     }
     url = f"http://www.cffex.com.cn/sj/jycs/{date[:6]}/{date[6:]}/index.xml"
-    r = requests.get(url, headers=headers)
+    # r = requests.get(url, headers=headers)
+
+    # 使用代理
+    r = get(url=url, headers=headers)
+
     xml_data = r.text
     # 解析 XML
     tree = ET.ElementTree(ET.fromstring(xml_data))

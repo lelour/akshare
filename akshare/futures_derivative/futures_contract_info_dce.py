@@ -9,7 +9,10 @@ http://www.dce.com.cn/dalianshangpin/ywfw/ywcs/jycs/hyxxcx/index.html
 from io import StringIO
 
 import pandas as pd
-import requests
+# import requests
+
+# 使用代理
+from akshare.request import post
 
 
 def futures_contract_info_dce() -> pd.DataFrame:
@@ -24,7 +27,11 @@ def futures_contract_info_dce() -> pd.DataFrame:
         "contractInformation.variety": "all",
         "contractInformation.trade_type": "0",
     }
-    r = requests.post(url, params=params)
+    # r = requests.post(url, params=params)
+
+    # 使用代理
+    r = post(url=url, params=params)
+
     temp_df = pd.read_html(StringIO(r.text))[0]
     temp_df["交易单位"] = pd.to_numeric(temp_df["交易单位"], errors="coerce")
     temp_df["最小变动价位"] = pd.to_numeric(temp_df["最小变动价位"], errors="coerce")

@@ -9,7 +9,10 @@ https://www.sge.com.cn/sjzx/mrhq
 """
 
 import pandas as pd
-import requests
+# import requests
+
+# 使用代理
+from akshare.request import get, post
 
 from akshare.utils.cons import headers
 
@@ -83,7 +86,12 @@ def spot_quotations_sge(symbol: str = "Au99.99") -> pd.DataFrame:
         "Chrome/107.0.0.0 Safari/537.36",
         "X-Requested-With": "XMLHttpRequest",
     }
-    r = requests.get(url, data=payload, headers=headers)
+    # 不使用代理
+    # r = requests.get(url, data=payload, headers=headers)
+
+    # 使用代理
+    r = get(url, data=payload, headers=headers)
+
     data_json = r.json()
     temp_df = pd.DataFrame(
         {
@@ -141,7 +149,12 @@ def spot_hist_sge(symbol: str = "Au99.99") -> pd.DataFrame:
         "Chrome/107.0.0.0 Safari/537.36",
         "X-Requested-With": "XMLHttpRequest",
     }
-    r = requests.post(url, data=payload, headers=headers)
+    # 不使用代理
+    # r = requests.post(url, data=payload, headers=headers)
+
+    # 使用代理
+    r = post(url, data=payload, headers=headers)
+
     data_json = r.json()
     temp_df = pd.DataFrame(data_json["time"])
     temp_df.columns = [
@@ -169,7 +182,12 @@ def spot_golden_benchmark_sge() -> pd.DataFrame:
     """
     url = "https://www.sge.com.cn/graph/DayilyJzj"
     payload = {}
-    r = requests.post(url, data=payload, headers=headers)
+    # 不使用代理
+    # r = requests.post(url, data=payload, headers=headers)
+
+    # 使用代理
+    r = post(url, data=payload, headers=headers)
+
     data_json = r.json()
     temp_df = pd.DataFrame(data_json["wp"])
     temp_df.columns = [
@@ -200,7 +218,12 @@ def spot_silver_benchmark_sge() -> pd.DataFrame:
     """
     url = "https://www.sge.com.cn/graph/DayilyShsilverJzj"
     payload = {}
-    r = requests.post(url, data=payload, headers=headers)
+    # 不使用代理
+    # r = requests.post(url, data=payload, headers=headers)
+
+    # 使用代理
+    r = post(url, data=payload, headers=headers)
+
     data_json = r.json()
     temp_df = pd.DataFrame(data_json["wp"])
     temp_df.columns = [

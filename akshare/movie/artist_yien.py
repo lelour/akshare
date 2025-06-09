@@ -13,8 +13,11 @@ import json
 import os
 
 import pandas as pd  # type: ignore
-import requests
+# import requests
 import py_mini_racer  # type: ignore
+
+# 使用代理
+from akshare.request import post
 
 
 def _get_js_path(name: str = "", module_file: str = "") -> str:
@@ -77,7 +80,11 @@ def business_value_artist() -> pd.DataFrame:
         "PageSize": "100",
         "MethodName": "Data_GetList_Star",
     }
-    r = requests.post(url, data=payload)
+    # r = requests.post(url, data=payload)
+
+    # 使用代理
+    r = post(url=url, data=payload)
+
     r.encoding = "utf8"
     data_json = json.loads(decrypt(r.text))
     temp_df = pd.DataFrame(data_json["Data"]["Table"])
@@ -115,7 +122,11 @@ def online_value_artist() -> pd.DataFrame:
         "PageSize": 100,
         "MethodName": "Data_GetList_Star",
     }
-    r = requests.post(url, data=payload)
+    # r = requests.post(url, data=payload)
+
+    # 使用代理
+    r = post(url=url, data=payload)
+
     r.encoding = "utf8"
     data_json = json.loads(decrypt(r.text))
     temp_df = pd.DataFrame(data_json["Data"]["Table"])

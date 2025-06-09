@@ -7,9 +7,12 @@ https://portal.eastmoneyfutures.com/pages/service/jyts.html#jyrl
 """
 
 import pandas as pd
-import requests
-from akshare.utils.cons import headers
+# import requests
 
+# 使用代理
+from akshare.request import get
+
+from akshare.utils.cons import headers
 
 def futures_rule_em() -> pd.DataFrame:
     """
@@ -19,7 +22,11 @@ def futures_rule_em() -> pd.DataFrame:
     :rtype: pandas.DataFrame
     """
     url = "https://eastmoneyfutures.com/api/ComManage/GetPZJYInfo"
-    r = requests.get(url, headers=headers)
+    # r = requests.get(url, headers=headers)
+
+    # 使用代理
+    r = get(url=url, headers=headers)
+
     data_json = r.json()
     temp_df = pd.DataFrame(data_json["Data"])
     return temp_df

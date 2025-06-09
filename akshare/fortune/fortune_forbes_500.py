@@ -7,7 +7,11 @@ https://www.forbeschina.com/lists
 """
 
 import pandas as pd
-import requests
+# import requests
+
+# 使用代理
+from akshare.request import get
+
 from bs4 import BeautifulSoup
 
 
@@ -22,7 +26,11 @@ def forbes_rank(symbol: str = "2021福布斯中国创投人100") -> pd.DataFrame
     :rtype: pandas.DataFrame
     """
     url = "https://www.forbeschina.com/lists"
-    r = requests.get(url, verify=False)
+    # r = requests.get(url, verify=False)
+
+    # 使用代理
+    r = get(url=url, verify=False)
+
     soup = BeautifulSoup(r.text, "lxml")
     need_list = [
         item.find_all("a") for item in soup.find_all("div", attrs={"class": "col-sm-4"})
@@ -36,7 +44,11 @@ def forbes_rank(symbol: str = "2021福布斯中国创投人100") -> pd.DataFrame
             ["https://www.forbeschina.com" + item["href"] for item in all_list],
         )
     )
-    r = requests.get(name_url_dict[symbol], verify=False)
+    # r = requests.get(name_url_dict[symbol], verify=False)
+
+    # 使用代理
+    r = get(url=name_url_dict[symbol], verify=False)
+
     temp_df = pd.read_html(r.text)[0]
     return temp_df
 

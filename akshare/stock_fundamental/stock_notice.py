@@ -9,7 +9,10 @@ https://data.eastmoney.com/notices/hsa/5.html
 import math
 
 import pandas as pd
-import requests
+# import requests
+
+# 使用代理
+from akshare.request import get
 
 from akshare.utils.tqdm import get_tqdm
 
@@ -47,7 +50,12 @@ def stock_notice_report(symbol: str = "全部", date: str = "20220511") -> pd.Da
         "begin_time": "-".join([date[:4], date[4:6], date[6:]]),
         "end_time": "-".join([date[:4], date[4:6], date[6:]]),
     }
-    r = requests.get(url, params=params)
+    # 不使用代理
+    # r = requests.get(url, params=params)
+
+    # 使用代理
+    r = get(url, params=params)
+
     data_json = r.json()
     total_page = math.ceil(data_json["data"]["total_hits"] / 100)
     big_df = pd.DataFrame()
@@ -58,7 +66,12 @@ def stock_notice_report(symbol: str = "全部", date: str = "20220511") -> pd.Da
                 "page_index": page,
             }
         )
-        r = requests.get(url, params=params)
+        # 不使用代理
+        # r = requests.get(url, params=params)
+
+        # 使用代理
+        r = get(url, params=params)
+
         data_json = r.json()
         temp_df = pd.DataFrame(data_json["data"]["list"])
         temp_codes_df = pd.DataFrame(

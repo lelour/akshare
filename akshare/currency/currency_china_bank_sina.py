@@ -10,7 +10,11 @@ from functools import lru_cache
 from io import StringIO
 
 import pandas as pd
-import requests
+# import requests
+
+# 使用代理
+from akshare.request import get
+
 from bs4 import BeautifulSoup
 from tqdm import tqdm
 
@@ -36,7 +40,9 @@ def _currency_boc_sina_map(
         "money_code": "EUR",
         "type": "0",
     }
-    r = requests.get(url, params=params)
+    # r = requests.get(url, params=params)
+    r = get(url, params=params)
+
     r.encoding = "gbk"
     soup = BeautifulSoup(r.text, "lxml")
     data_dict = dict(
@@ -79,7 +85,9 @@ def currency_boc_sina(
         "page": "1",
         "call_type": "ajax",
     }
-    r = requests.get(url, params=params)
+    # r = requests.get(url, params=params)
+    r = get(url, params=params)
+
     soup = BeautifulSoup(r.text, "lxml")
     soup.find(attrs={"id": "money_code"})
     page_element_list = soup.find_all("a", attrs={"class": "page"})
@@ -87,7 +95,9 @@ def currency_boc_sina(
     big_df = pd.DataFrame()
     for page in tqdm(range(1, page_num + 1), leave=False):
         params.update({"page": page})
-        r = requests.get(url, params=params)
+        # r = requests.get(url, params=params)
+        r = get(url, params=params)
+
         temp_df = pd.read_html(StringIO(r.text), header=0)[0]
         big_df = pd.concat([big_df, temp_df], ignore_index=True)
     big_df.columns = [

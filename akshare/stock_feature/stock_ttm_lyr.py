@@ -7,7 +7,10 @@ https://www.legulegu.com/stockdata/a-ttm-lyr
 """
 
 import pandas as pd
-import requests
+# import requests
+
+# 使用代理
+from akshare.request import get
 
 from akshare.stock_feature.stock_a_indicator import get_token_lg, get_cookie_csrf
 
@@ -24,11 +27,17 @@ def stock_a_ttm_lyr() -> pd.DataFrame:
         "marketId": "5",
         "token": get_token_lg(),
     }
-    r = requests.get(
-        url,
-        params=params,
-        **get_cookie_csrf(url="https://www.legulegu.com/stockdata/a-ttm-lyr"),
-    )
+
+    # 不使用代理
+    # r = requests.get(
+    #     url,
+    #     params=params,
+    #     **get_cookie_csrf(url="https://www.legulegu.com/stockdata/a-ttm-lyr"),
+    # )
+
+    # 使用代理
+    r = get(url, params=params, **get_cookie_csrf(url="https://www.legulegu.com/stockdata/a-ttm-lyr"))
+
     data_json = r.json()
     temp_df = pd.DataFrame(data_json["data"])
     temp_df["date"] = pd.to_datetime(temp_df["date"], errors="coerce").dt.date

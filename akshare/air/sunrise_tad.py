@@ -9,7 +9,10 @@ https://www.timeanddate.com
 from io import StringIO
 
 import pandas as pd
-import requests
+# import requests
+
+# 使用代理
+from akshare.request import get
 
 
 def sunrise_city_list() -> list:
@@ -20,7 +23,9 @@ def sunrise_city_list() -> list:
     :rtype: list
     """
     url = "https://www.timeanddate.com/astronomy/china"
-    r = requests.get(url)
+    # r = requests.get(url)
+    r = get(url)
+
     city_list = []
     china_city_one_df = pd.read_html(StringIO(r.text))[1]
     china_city_two_df = pd.read_html(StringIO(r.text))[2]
@@ -55,7 +60,9 @@ def sunrise_daily(date: str = "20240428", city: str = "beijing") -> pd.DataFrame
         year = date[:4]
         month = date[4:6]
         url = f"https://www.timeanddate.com/sun/china/{city}?month={month}&year={year}"
-        r = requests.get(url, verify=False)
+        # r = requests.get(url, verify=False)
+        r = get(url, verify=False)
+
         table = pd.read_html(StringIO(r.text), header=2)[1]
         month_df = table.iloc[:-1,]
         day_df = month_df[
@@ -88,7 +95,9 @@ def sunrise_monthly(date: str = "20240428", city: str = "beijing") -> pd.DataFra
         year = date[:4]
         month = date[4:6]
         url = f"https://www.timeanddate.com/sun/china/{city}?month={month}&year={year}"
-        r = requests.get(url)
+        # r = requests.get(url)
+        r = get(url)
+
         table = pd.read_html(StringIO(r.text), header=2)[1]
         month_df = table.iloc[:-1,].copy()
         month_df.index = [date[:-2]] * len(month_df)

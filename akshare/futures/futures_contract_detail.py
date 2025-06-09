@@ -9,7 +9,10 @@ https://finance.sina.com.cn/futures/quotes/V2101.shtml
 from io import StringIO
 
 import pandas as pd
-import requests
+# import requests
+
+# 使用代理
+from akshare.request import get
 
 
 def futures_contract_detail(symbol: str = "AP2101") -> pd.DataFrame:
@@ -22,7 +25,11 @@ def futures_contract_detail(symbol: str = "AP2101") -> pd.DataFrame:
     :rtype: pandas.DataFrame
     """
     url = f"https://finance.sina.com.cn/futures/quotes/{symbol}.shtml"
-    r = requests.get(url)
+    # r = requests.get(url)
+
+    # 使用代理
+    r = get(url=url)
+
     r.encoding = "gb2312"
     temp_df = pd.read_html(StringIO(r.text))[6]
     data_one = temp_df.iloc[:, :2]

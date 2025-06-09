@@ -6,8 +6,11 @@ Desc: 沐甜科技数据中心-中国食糖指数
 https://www.msweet.com.cn/mtkj/sjzx13/index.html
 """
 
-import requests
+# import requests
 import pandas as pd
+
+# 使用代理
+from akshare.request import get
 
 
 def index_sugar_msweet() -> pd.DataFrame:
@@ -22,7 +25,11 @@ def index_sugar_msweet() -> pd.DataFrame:
         "struts.portlet.action": "/portlet/price!getSTZSJson.action",
         "moduleId": "cb752447cfe24b44b18c7a7e9abab048",
     }
-    r = requests.get(url, params=params)
+    # r = requests.get(url, params=params)
+
+    # 使用代理
+    r = get(url=url, params=params)
+
     data_json = r.json()
     temp_df = pd.concat(
         [pd.DataFrame(data_json["category"]), pd.DataFrame(data_json["data"])], axis=1
@@ -44,7 +51,11 @@ def index_inner_quote_sugar_msweet() -> pd.DataFrame:
     :rtype: pandas.DataFrame
     """
     url = "https://www.msweet.com.cn/datacenterapply/datacenter/json/JinKongTang.json"
-    r = requests.get(url)
+    # r = requests.get(url)
+
+    # 使用代理
+    r = get(url=url)
+
     data_json = r.json()
     temp_df = pd.concat(
         [pd.DataFrame(data_json["category"]), pd.DataFrame(data_json["data"])], axis=1
@@ -89,7 +100,11 @@ def index_outer_quote_sugar_msweet() -> pd.DataFrame:
     :rtype: pandas.DataFrame
     """
     url = "https://www.msweet.com.cn/datacenterapply/datacenter/json/Jkpewlr.json"
-    r = requests.get(url)
+    # r = requests.get(url)
+
+    # 使用代理
+    r = get(url=url)
+
     data_json = r.json()
     temp_df = pd.concat(
         [pd.DataFrame(data_json["category"]), pd.DataFrame(data_json["data"])], axis=1

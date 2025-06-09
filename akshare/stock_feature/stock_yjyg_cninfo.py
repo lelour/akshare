@@ -7,7 +7,10 @@ http://www.cninfo.com.cn/new/commonUrl?url=data/yypl
 """
 
 import pandas as pd
-import requests
+# import requests
+
+# 使用代理
+from akshare.request import post
 
 
 def stock_report_disclosure(
@@ -53,7 +56,12 @@ def stock_report_disclosure(
         "pagesize": "10000",
         "pagenum": "1",
     }
-    r = requests.post(url, params=params)
+    # 不使用代理
+    # r = requests.post(url, params=params)
+
+    # 使用代理
+    r = post(url, params=params)
+
     text_json = r.json()
     temp_df = pd.DataFrame(text_json["prbookinfos"])
     temp_df.columns = [

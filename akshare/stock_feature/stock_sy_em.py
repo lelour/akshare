@@ -11,7 +11,10 @@ Desc: 东方财富网-数据中心-特色数据-商誉
 """
 
 import pandas as pd
-import requests
+# import requests
+
+# 使用代理
+from akshare.request import get
 
 from akshare.utils.tqdm import get_tqdm
 
@@ -35,7 +38,12 @@ def stock_sy_profile_em() -> pd.DataFrame:
         "filter": """((GOODWILL_STATE="1")( | IMPAIRMENT_STATE="1"))(TRADE_BOARD="all")""",
     }
 
-    r = requests.get(url, params=params)
+    # 不使用代理
+    # r = requests.get(url, params=params)
+
+    # 使用代理
+    r = get(url, params=params)
+
     data_json = r.json()
     data_df = pd.DataFrame(data_json["result"]["data"])
     data_df.columns = [
@@ -101,14 +109,24 @@ def stock_sy_yq_em(date: str = "20240630") -> pd.DataFrame:
         "reportName": "RPT_GOODWILL_STOCKPREDICT",
         "filter": f"""(REPORT_DATE='{"-".join([date[:4], date[4:6], date[6:]])}')""",
     }
-    r = requests.get(url, params=params)
+    # 不使用代理
+    # r = requests.get(url, params=params)
+
+    # 使用代理
+    r = get(url, params=params)
+
     data_json = r.json()
     big_df = pd.DataFrame()
     total_page = int(data_json["result"]["pages"])
     tqdm = get_tqdm()
     for page in tqdm(range(1, total_page + 1), leave=False):
         params.update({"pageNumber": page})
-        r = requests.get(url, params=params)
+        # 不使用代理
+        # r = requests.get(url, params=params)
+
+        # 使用代理
+        r = get(url, params=params)
+
         data_json = r.json()
         temp_df = pd.DataFrame(data_json["result"]["data"])
         big_df = pd.concat(objs=[big_df, temp_df], ignore_index=True)
@@ -210,14 +228,24 @@ def stock_sy_jz_em(date: str = "20240630") -> pd.DataFrame:
         "reportName": "RPT_GOODWILL_STOCKDETAILS",
         "filter": f"""(REPORT_DATE='{"-".join([date[:4], date[4:6], date[6:]])}')""",
     }
-    r = requests.get(url, params=params)
+    # 不使用代理
+    # r = requests.get(url, params=params)
+
+    # 使用代理
+    r = get(url, params=params)
+
     data_json = r.json()
     big_df = pd.DataFrame()
     total_page = int(data_json["result"]["pages"])
     tqdm = get_tqdm()
     for page in tqdm(range(1, total_page + 1), leave=False):
         params.update({"pageNumber": page})
-        r = requests.get(url, params=params)
+        # 不使用代理
+        # r = requests.get(url, params=params)
+
+        # 使用代理
+        r = get(url, params=params)
+
         data_json = r.json()
         temp_df = pd.DataFrame(data_json["result"]["data"])
         big_df = pd.concat(objs=[big_df, temp_df], ignore_index=True)
@@ -311,14 +339,24 @@ def stock_sy_em(date: str = "20231231") -> pd.DataFrame:
         "reportName": "RPT_GOODWILL_STOCKDETAILS",
         "filter": f"""(REPORT_DATE='{"-".join([date[:4], date[4:6], date[6:]])}')""",
     }
-    r = requests.get(url, params=params)
+    # 不使用代理
+    # r = requests.get(url, params=params)
+
+    # 使用代理
+    r = get(url, params=params)
+
     data_json = r.json()
     big_df = pd.DataFrame()
     total_page = int(data_json["result"]["pages"])
     tqdm = get_tqdm()
     for page in tqdm(range(1, total_page + 1), leave=False):
         params.update({"pageNumber": page})
-        r = requests.get(url, params=params)
+        # 不使用代理
+        # r = requests.get(url, params=params)
+
+        # 使用代理
+        r = get(url, params=params)
+
         data_json = r.json()
         temp_df = pd.DataFrame(data_json["result"]["data"])
         big_df = pd.concat(objs=[big_df, temp_df], ignore_index=True)
@@ -403,14 +441,24 @@ def stock_sy_hy_em(date: str = "20240930") -> pd.DataFrame:
         "reportName": "RPT_GOODWILL_INDUSTATISTICS",
         "filter": f"""(REPORT_DATE='{"-".join([date[:4], date[4:6], date[6:]])}')""",
     }
-    r = requests.get(url, params=params)
+    # 不使用代理
+    # r = requests.get(url, params=params)
+
+    # 使用代理
+    r = get(url, params=params)
+
     data_json = r.json()
     big_df = pd.DataFrame()
     total_page = int(data_json["result"]["pages"])
     tqdm = get_tqdm()
     for page in tqdm(range(1, total_page + 1), leave=False):
         params.update({"pageNumber": page})
-        r = requests.get(url, params=params)
+        # 不使用代理
+        # r = requests.get(url, params=params)
+
+        # 使用代理
+        r = get(url, params=params)
+
         data_json = r.json()
         temp_df = pd.DataFrame(data_json["result"]["data"])
         big_df = pd.concat(objs=[big_df, temp_df], ignore_index=True)

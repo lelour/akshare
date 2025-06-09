@@ -9,7 +9,10 @@ https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/data_library.html
 from io import StringIO
 
 import pandas as pd
-import requests
+# import requests
+
+# 使用代理
+from akshare.request import get
 
 from akshare.article.cons import ff_home_url
 
@@ -21,7 +24,9 @@ def article_ff_crr() -> pd.DataFrame:
     :return: FF多因子模型单一表格
     :rtype: pandas.DataFrame
     """
-    res = requests.get(ff_home_url)
+    # res = requests.get(ff_home_url)
+    res = get(ff_home_url)
+
     # first table
     list_index = (
         pd.read_html(StringIO(res.text), header=0, index_col=0)[4]

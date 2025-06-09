@@ -10,7 +10,11 @@ from io import StringIO
 
 import pandas as pd
 import py_mini_racer
-import requests
+# import requests
+
+# 使用代理
+from akshare.request import get
+
 from bs4 import BeautifulSoup
 
 from akshare.datasets import get_ths_js
@@ -59,7 +63,12 @@ def stock_rank_cxg_ths(symbol: str = "创月新高") -> pd.DataFrame:
         f"http://data.10jqka.com.cn/rank/cxg/board/{symbol_map[symbol]}/field/"
         f"stockcode/order/asc/page/1/ajax/1/free/1/"
     )
-    r = requests.get(url, headers=headers)
+    # 不使用代理
+    # r = requests.get(url, headers=headers)
+
+    # 使用代理
+    r = get(url, headers=headers)
+
     soup = BeautifulSoup(r.text, features="lxml")
     try:
         total_page = soup.find(name="span", attrs={"class": "page_info"}).text.split(
@@ -80,7 +89,12 @@ def stock_rank_cxg_ths(symbol: str = "创月新高") -> pd.DataFrame:
             f"http://data.10jqka.com.cn/rank/cxg/board/{symbol_map[symbol]}/field/stockcode/"
             f"order/asc/page/{page}/ajax/1/free/1/"
         )
-        r = requests.get(url, headers=headers)
+        # 不使用代理
+        # r = requests.get(url, headers=headers)
+
+        # 使用代理
+        r = get(url, headers=headers)
+
         temp_df = pd.read_html(StringIO(r.text))[0]
         big_df = pd.concat(objs=[big_df, temp_df], ignore_index=True)
     big_df.columns = [
@@ -134,7 +148,12 @@ def stock_rank_cxd_ths(symbol: str = "创月新低") -> pd.DataFrame:
         f"http://data.10jqka.com.cn/rank/cxd/board/{symbol_map[symbol]}/field/"
         f"stockcode/order/asc/page/1/ajax/1/free/1/"
     )
-    r = requests.get(url, headers=headers)
+    # 不使用代理
+    # r = requests.get(url, headers=headers)
+
+    # 使用代理
+    r = get(url, headers=headers)
+
     soup = BeautifulSoup(r.text, features="lxml")
     try:
         total_page = soup.find(name="span", attrs={"class": "page_info"}).text.split(
@@ -155,7 +174,12 @@ def stock_rank_cxd_ths(symbol: str = "创月新低") -> pd.DataFrame:
             f"http://data.10jqka.com.cn/rank/cxd/board/{symbol_map[symbol]}/field/"
             f"stockcode/order/asc/page/{page}/ajax/1/free/1/"
         )
-        r = requests.get(url, headers=headers)
+        # 不使用代理
+        # r = requests.get(url, headers=headers)
+
+        # 使用代理
+        r = get(url, headers=headers)
+
         temp_df = pd.read_html(StringIO(r.text))[0]
         big_df = pd.concat(objs=[big_df, temp_df], ignore_index=True)
     big_df.columns = [
@@ -198,7 +222,12 @@ def stock_rank_lxsz_ths() -> pd.DataFrame:
         "Cookie": f"v={v_code}",
     }
     url = "http://data.10jqka.com.cn/rank/lxsz/field/lxts/order/desc/page/1/ajax/1/free/1/"
-    r = requests.get(url, headers=headers)
+    # 不使用代理
+    # r = requests.get(url, headers=headers)
+
+    # 使用代理
+    r = get(url, headers=headers)
+
     soup = BeautifulSoup(r.text, features="lxml")
     try:
         total_page = soup.find(name="span", attrs={"class": "page_info"}).text.split(
@@ -216,7 +245,12 @@ def stock_rank_lxsz_ths() -> pd.DataFrame:
             "Cookie": f"v={v_code}",
         }
         url = f"http://data.10jqka.com.cn/rank/lxsz/field/lxts/order/desc/page/{page}/ajax/1/free/1/"
-        r = requests.get(url, headers=headers)
+        # 不使用代理
+        # r = requests.get(url, headers=headers)
+
+        # 使用代理
+        r = get(url, headers=headers)
+
         temp_df = pd.read_html(StringIO(r.text), converters={"股票代码": str})[0]
         big_df = pd.concat(objs=[big_df, temp_df], ignore_index=True)
     big_df.columns = [
@@ -259,7 +293,12 @@ def stock_rank_lxxd_ths() -> pd.DataFrame:
         "Cookie": f"v={v_code}",
     }
     url = "http://data.10jqka.com.cn/rank/lxxd/field/lxts/order/desc/page/1/ajax/1/free/1/"
-    r = requests.get(url, headers=headers)
+    # 不使用代理
+    # r = requests.get(url, headers=headers)
+
+    # 使用代理
+    r = get(url, headers=headers)
+
     soup = BeautifulSoup(r.text, features="lxml")
     try:
         total_page = soup.find(name="span", attrs={"class": "page_info"}).text.split(
@@ -277,7 +316,12 @@ def stock_rank_lxxd_ths() -> pd.DataFrame:
             "Cookie": f"v={v_code}",
         }
         url = f"http://data.10jqka.com.cn/rank/lxxd/field/lxts/order/desc/page/{page}/ajax/1/free/1/"
-        r = requests.get(url, headers=headers)
+        # 不使用代理
+        # r = requests.get(url, headers=headers)
+
+        # 使用代理
+        r = get(url, headers=headers)
+
         temp_df = pd.read_html(StringIO(r.text), converters={"股票代码": str})[0]
         big_df = pd.concat(objs=[big_df, temp_df], ignore_index=True)
     big_df.columns = [
@@ -320,7 +364,12 @@ def stock_rank_cxfl_ths() -> pd.DataFrame:
         "Cookie": f"v={v_code}",
     }
     url = "http://data.10jqka.com.cn/rank/cxfl/field/count/order/desc/ajax/1/free/1/page/1/free/1/"
-    r = requests.get(url, headers=headers)
+    # 不使用代理
+    # r = requests.get(url, headers=headers)
+
+    # 使用代理
+    r = get(url, headers=headers)
+
     soup = BeautifulSoup(r.text, features="lxml")
     try:
         total_page = soup.find(name="span", attrs={"class": "page_info"}).text.split(
@@ -338,7 +387,12 @@ def stock_rank_cxfl_ths() -> pd.DataFrame:
             "Cookie": f"v={v_code}",
         }
         url = f"http://data.10jqka.com.cn/rank/cxfl/field/count/order/desc/ajax/1/free/1/page/{page}/free/1/"
-        r = requests.get(url, headers=headers)
+        # 不使用代理
+        # r = requests.get(url, headers=headers)
+
+        # 使用代理
+        r = get(url, headers=headers)
+
         temp_df = pd.read_html(StringIO(r.text), converters={"股票代码": str})[0]
         big_df = pd.concat(objs=[big_df, temp_df], ignore_index=True)
     big_df.columns = [
@@ -380,7 +434,12 @@ def stock_rank_cxsl_ths() -> pd.DataFrame:
         "Cookie": f"v={v_code}",
     }
     url = "http://data.10jqka.com.cn/rank/cxsl/field/count/order/desc/ajax/1/free/1/page/1/free/1/"
-    r = requests.get(url, headers=headers)
+    # 不使用代理
+    # r = requests.get(url, headers=headers)
+
+    # 使用代理
+    r = get(url, headers=headers)
+
     soup = BeautifulSoup(r.text, features="lxml")
     try:
         total_page = soup.find(name="span", attrs={"class": "page_info"}).text.split(
@@ -398,7 +457,12 @@ def stock_rank_cxsl_ths() -> pd.DataFrame:
             "Cookie": f"v={v_code}",
         }
         url = f"http://data.10jqka.com.cn/rank/cxsl/field/count/order/desc/ajax/1/free/1/page/{page}/free/1/"
-        r = requests.get(url, headers=headers)
+        # 不使用代理
+        # r = requests.get(url, headers=headers)
+
+        # 使用代理
+        r = get(url, headers=headers)
+
         temp_df = pd.read_html(StringIO(r.text), converters={"股票代码": str})[0]
         big_df = pd.concat(objs=[big_df, temp_df], ignore_index=True)
     big_df.columns = [
@@ -452,7 +516,12 @@ def stock_rank_xstp_ths(symbol: str = "500日均线") -> pd.DataFrame:
         "Cookie": f"v={v_code}",
     }
     url = f"http://data.10jqka.com.cn/rank/xstp/board/{symbol_map[symbol]}/order/asc/ajax/1/free/1/page/1/free/1/"
-    r = requests.get(url, headers=headers)
+    # 不使用代理
+    # r = requests.get(url, headers=headers)
+
+    # 使用代理
+    r = get(url, headers=headers)
+
     soup = BeautifulSoup(r.text, features="lxml")
     try:
         total_page = soup.find(name="span", attrs={"class": "page_info"}).text.split(
@@ -473,7 +542,12 @@ def stock_rank_xstp_ths(symbol: str = "500日均线") -> pd.DataFrame:
             f"http://data.10jqka.com.cn/rank/xstp/board/{symbol_map[symbol]}/order/"
             f"asc/ajax/1/free/1/page/{page}/free/1/"
         )
-        r = requests.get(url, headers=headers)
+        # 不使用代理
+        # r = requests.get(url, headers=headers)
+
+        # 使用代理
+        r = get(url, headers=headers)
+
         temp_df = pd.read_html(StringIO(r.text), converters={"股票代码": str})[0]
         big_df = pd.concat(objs=[big_df, temp_df], ignore_index=True)
     big_df.columns = [
@@ -524,7 +598,12 @@ def stock_rank_xxtp_ths(symbol: str = "500日均线") -> pd.DataFrame:
         "Cookie": f"v={v_code}",
     }
     url = f"http://data.10jqka.com.cn/rank/xxtp/board/{symbol_map[symbol]}/order/asc/ajax/1/free/1/page/1/free/1/"
-    r = requests.get(url, headers=headers)
+    # 不使用代理
+    # r = requests.get(url, headers=headers)
+
+    # 使用代理
+    r = get(url, headers=headers)
+
     soup = BeautifulSoup(r.text, features="lxml")
     try:
         total_page = soup.find(name="span", attrs={"class": "page_info"}).text.split(
@@ -545,7 +624,12 @@ def stock_rank_xxtp_ths(symbol: str = "500日均线") -> pd.DataFrame:
             f"http://data.10jqka.com.cn/rank/xxtp/board/{symbol_map[symbol]}/order/"
             f"asc/ajax/1/free/1/page/{page}/free/1/"
         )
-        r = requests.get(url, headers=headers)
+        # 不使用代理
+        # r = requests.get(url, headers=headers)
+
+        # 使用代理
+        r = get(url, headers=headers)
+
         temp_df = pd.read_html(StringIO(r.text), converters={"股票代码": str})[0]
         big_df = pd.concat(objs=[big_df, temp_df], ignore_index=True)
     big_df.columns = [
@@ -584,7 +668,12 @@ def stock_rank_ljqs_ths() -> pd.DataFrame:
         "Cookie": f"v={v_code}",
     }
     url = "http://data.10jqka.com.cn/rank/ljqs/field/count/order/desc/ajax/1/free/1/page/1/free/1/"
-    r = requests.get(url, headers=headers)
+    # 不使用代理
+    # r = requests.get(url, headers=headers)
+
+    # 使用代理
+    r = get(url, headers=headers)
+
     soup = BeautifulSoup(r.text, features="lxml")
     try:
         total_page = soup.find(name="span", attrs={"class": "page_info"}).text.split(
@@ -602,7 +691,12 @@ def stock_rank_ljqs_ths() -> pd.DataFrame:
             "Cookie": f"v={v_code}",
         }
         url = f"http://data.10jqka.com.cn/rank/ljqs/field/count/order/desc/ajax/1/free/1/page/{page}/free/1/"
-        r = requests.get(url, headers=headers)
+        # 不使用代理
+        # r = requests.get(url, headers=headers)
+
+        # 使用代理
+        r = get(url, headers=headers)
+
         temp_df = pd.read_html(StringIO(r.text), converters={"股票代码": str})[0]
         big_df = pd.concat(objs=[big_df, temp_df], ignore_index=True)
     big_df.columns = [
@@ -642,7 +736,12 @@ def stock_rank_ljqd_ths() -> pd.DataFrame:
         "Cookie": f"v={v_code}",
     }
     url = "http://data.10jqka.com.cn/rank/ljqd/field/count/order/desc/ajax/1/free/1/page/1/free/1/"
-    r = requests.get(url, headers=headers)
+    # 不使用代理
+    # r = requests.get(url, headers=headers)
+
+    # 使用代理
+    r = get(url, headers=headers)
+
     soup = BeautifulSoup(r.text, features="lxml")
     try:
         total_page = soup.find(name="span", attrs={"class": "page_info"}).text.split(
@@ -660,7 +759,12 @@ def stock_rank_ljqd_ths() -> pd.DataFrame:
             "Cookie": f"v={v_code}",
         }
         url = f"http://data.10jqka.com.cn/rank/ljqd/field/count/order/desc/ajax/1/free/1/page/{page}/free/1/"
-        r = requests.get(url, headers=headers)
+        # 不使用代理
+        # r = requests.get(url, headers=headers)
+
+        # 使用代理
+        r = get(url, headers=headers)
+
         temp_df = pd.read_html(StringIO(r.text), converters={"股票代码": str})[0]
         big_df = pd.concat(objs=[big_df, temp_df], ignore_index=True)
     big_df.columns = [
@@ -701,7 +805,12 @@ def stock_rank_xzjp_ths() -> pd.DataFrame:
         "Cookie": f"v={v_code}",
     }
     url = "http://data.10jqka.com.cn/ajax/xzjp/field/DECLAREDATE/order/desc/ajax/1/free/1/"
-    r = requests.get(url, headers=headers)
+    # 不使用代理
+    # r = requests.get(url, headers=headers)
+
+    # 使用代理
+    r = get(url, headers=headers)
+
     temp_df = pd.read_html(StringIO(r.text), converters={"股票代码": str})[0]
     big_df = pd.concat(objs=[big_df, temp_df], ignore_index=True)
     big_df.columns = [

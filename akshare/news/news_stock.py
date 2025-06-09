@@ -9,7 +9,10 @@ https://so.eastmoney.com/news/s?keyword=%E4%B8%AD%E5%9B%BD%E4%BA%BA%E5%AF%BF&pag
 import json
 
 import pandas as pd
-import requests
+# import requests
+
+# 使用代理
+from akshare.request import get
 
 
 def stock_news_em(symbol: str = "300059") -> pd.DataFrame:
@@ -30,7 +33,11 @@ def stock_news_em(symbol: str = "300059") -> pd.DataFrame:
         '"param":{"cmsArticleWebOld":{"searchScope":"default","sort":"default","pageIndex":1,'
         '"pageSize":100,"preTag":"<em>","postTag":"</em>"}}}',
     }
-    r = requests.get(url, params=params)
+    # r = requests.get(url, params=params)
+
+    # 使用代理
+    r = get(url=url, params=params)
+
     data_text = r.text
     data_json = json.loads(
         data_text.strip("jQuery3510875346244069884_1668256937995(")[:-1]

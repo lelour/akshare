@@ -8,7 +8,10 @@ https://quote.eastmoney.com/center/gridlist.html#bond_sz_buyback
 
 import pandas as pd
 
-import requests
+# import requests
+
+# 使用代理
+from akshare.request import get
 
 
 def bond_sh_buy_back_em() -> pd.DataFrame:
@@ -32,7 +35,9 @@ def bond_sh_buy_back_em() -> pd.DataFrame:
         "dect": "1",
         "wbp2u": "|0|0|0|web",
     }
-    r = requests.get(url, params=params)
+    # r = requests.get(url, params=params)
+    r = get(url, params=params)
+
     data_json = r.json()
     temp_df = pd.DataFrame(data_json['data']['diff'])
     temp_df.reset_index(inplace=True)
@@ -102,7 +107,9 @@ def bond_sz_buy_back_em() -> pd.DataFrame:
         "dect": "1",
         "wbp2u": "|0|0|0|web",
     }
-    r = requests.get(url, params=params)
+    # r = requests.get(url, params=params)
+    r = get(url, params=params)
+
     data_json = r.json()
     temp_df = pd.DataFrame(data_json['data']['diff'])
     temp_df.reset_index(inplace=True)
@@ -176,7 +183,9 @@ def bond_buy_back_hist_em(symbol: str = "204001"):
         "fields2": "f51,f52,f53,f54,f55,f56,f57,f58,f59,f60,f61,f62,f63,f64",
         "forcect": "1"
     }
-    r = requests.get(url, params=params)
+    # r = requests.get(url, params=params)
+    r = get(url, params=params)
+
     data_json = r.json()
     temp_df = pd.DataFrame([item.split(',') for item in data_json['data']['klines']])
     temp_df.columns = [

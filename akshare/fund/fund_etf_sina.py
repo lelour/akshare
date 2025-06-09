@@ -8,7 +8,10 @@ https://vip.stock.finance.sina.com.cn/fund_center/index.html#jjhqetf
 
 import pandas as pd
 import py_mini_racer
-import requests
+# import requests
+
+# 使用代理
+from akshare.request import get
 
 from akshare.stock.cons import hk_js_decode
 from akshare.utils import demjson
@@ -40,7 +43,11 @@ def fund_etf_category_sina(symbol: str = "LOF基金") -> pd.DataFrame:
         "node": fund_map[symbol],
         "[object HTMLDivElement]": "qvvne",
     }
-    r = requests.get(url, params=params)
+    # r = requests.get(url, params=params)
+
+    # 使用代理
+    r = get(url=url, params=params)
+
     data_text = r.text
     data_json = demjson.decode(data_text[data_text.find("([") + 1 : -2])
     temp_df = pd.DataFrame(data_json)
@@ -123,7 +130,11 @@ def fund_etf_hist_sina(symbol: str = "sh510050") -> pd.DataFrame:
     :rtype: pandas.DataFrame
     """
     url = f"https://finance.sina.com.cn/realstock/company/{symbol}/hisdata/klc_kl.js"
-    r = requests.get(url)
+    # r = requests.get(url)
+
+    # 使用代理
+    r = get(url=url)
+
     js_code = py_mini_racer.MiniRacer()
     js_code.eval(hk_js_decode)
     dict_list = js_code.call(
@@ -158,7 +169,11 @@ def fund_etf_dividend_sina(symbol: str = "sh510050") -> pd.DataFrame:
     """
     # 构建复权数据URL
     factor_url = f"https://finance.sina.com.cn/realstock/company/{symbol}/hfq.js"
-    r = requests.get(factor_url)
+    # r = requests.get(factor_url)
+
+    # 使用代理
+    r = get(url=factor_url)
+
     text = r.text
     if text.startswith("var"):
         json_str = text.split("=")[1].strip().rsplit("}", maxsplit=1)[0].strip()

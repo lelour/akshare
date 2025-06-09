@@ -7,7 +7,10 @@ https://legulegu.com/stockdata/fund-position/pos-stock
 """
 
 import pandas as pd
-import requests
+# import requests
+
+# 使用代理
+from akshare.request import get
 
 from akshare.stock_feature.stock_a_indicator import get_token_lg, get_cookie_csrf
 
@@ -27,11 +30,21 @@ def fund_stock_position_lg() -> pd.DataFrame:
         "category": "总仓位",
         "marketId": "5",
     }
-    r = requests.get(
+
+    # 不使用代理
+    # r = requests.get(
+    #     url,
+    #     params=params,
+    #     **get_cookie_csrf(url="https://legulegu.com/stockdata/fund-position/pos-stock"),
+    # )
+
+    # 使用代理
+    r = get(
         url,
         params=params,
         **get_cookie_csrf(url="https://legulegu.com/stockdata/fund-position/pos-stock"),
     )
+
     data_json = r.json()
     temp_df = pd.DataFrame(data_json)
     temp_df["date"] = pd.to_datetime(temp_df["date"]).dt.date
@@ -63,13 +76,25 @@ def fund_balance_position_lg() -> pd.DataFrame:
         "category": "总仓位",
         "marketId": "5",
     }
-    r = requests.get(
+
+    # 不使用代理
+    # r = requests.get(
+    #     url,
+    #     params=params,
+    #     **get_cookie_csrf(
+    #         url="https://legulegu.com/stockdata/fund-position/pos-pingheng"
+    #     ),
+    # )
+
+    # 使用代理
+    r = get(
         url,
         params=params,
         **get_cookie_csrf(
             url="https://legulegu.com/stockdata/fund-position/pos-pingheng"
         ),
     )
+
     data_json = r.json()
     temp_df = pd.DataFrame(data_json)
     temp_df["date"] = pd.to_datetime(temp_df["date"]).dt.date
@@ -101,13 +126,25 @@ def fund_linghuo_position_lg() -> pd.DataFrame:
         "category": "总仓位",
         "marketId": "5",
     }
-    r = requests.get(
+
+    # 不使用代理
+    # r = requests.get(
+    #     url,
+    #     params=params,
+    #     **get_cookie_csrf(
+    #         url="https://legulegu.com/stockdata/fund-position/pos-linghuo"
+    #     ),
+    # )
+
+    # 使用代理
+    r = get(
         url,
         params=params,
         **get_cookie_csrf(
             url="https://legulegu.com/stockdata/fund-position/pos-linghuo"
         ),
     )
+
     data_json = r.json()
     temp_df = pd.DataFrame(data_json)
     temp_df["date"] = pd.to_datetime(temp_df["date"]).dt.date

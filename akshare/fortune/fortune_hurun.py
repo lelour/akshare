@@ -10,6 +10,10 @@ import warnings
 
 import pandas as pd
 import requests
+
+# 使用代理
+from akshare.request import get
+
 from bs4 import BeautifulSoup
 
 
@@ -25,7 +29,11 @@ def hurun_rank(indicator: str = "胡润百富榜", year: str = "2023") -> pd.Dat
     :rtype: pandas.DataFrame
     """
     url = "https://www.hurun.net/zh-CN/Rank/HsRankDetails?pagetype=rich"
-    r = requests.get(url)
+    # r = requests.get(url)
+
+    # 使用代理
+    r = get(url=url)
+
     soup = BeautifulSoup(r.text, "lxml")
     url_list = []
     for item in soup.find_all("ul", attrs={"class": "dropdown-menu"}):
@@ -37,7 +45,11 @@ def hurun_rank(indicator: str = "胡润百富榜", year: str = "2023") -> pd.Dat
             name_list.append(inner_item.text.strip())
 
     name_url_map = dict(zip(name_list, url_list))
-    r = requests.get(name_url_map[indicator])
+    # r = requests.get(name_url_map[indicator])
+
+    # 使用代理
+    r = get(url=name_url_map[indicator])
+
     soup = BeautifulSoup(r.text, "lxml")
     code_list = [
         item["value"].split("=")[2]
@@ -72,7 +84,11 @@ def hurun_rank(indicator: str = "胡润百富榜", year: str = "2023") -> pd.Dat
                     }
                 )
                 url = "https://www.hurun.net/zh-CN/Rank/HsRankDetailsList"
-                r = requests.get(url, params=params)
+                # r = requests.get(url, params=params)
+
+                # 使用代理
+                r = get(url=url, params=params)
+
                 data_json = r.json()
                 temp_df = pd.DataFrame(data_json["rows"])
                 offset = offset + 20
@@ -102,7 +118,11 @@ def hurun_rank(indicator: str = "胡润百富榜", year: str = "2023") -> pd.Dat
         ]
         return big_df
     url = "https://www.hurun.net/zh-CN/Rank/HsRankDetailsList"
-    r = requests.get(url, params=params)
+    # r = requests.get(url, params=params)
+
+    # 使用代理
+    r = get(url=url, params=params)
+
     data_json = r.json()
     temp_df = pd.DataFrame(data_json["rows"])
     if indicator == "胡润百富榜":

@@ -7,7 +7,10 @@ https://www.szse.cn/disclosure/margin/object/index.html
 """
 
 import pandas as pd
-import requests
+# import requests
+
+# 使用代理
+from akshare.request import get
 
 from akshare.utils.tqdm import get_tqdm
 
@@ -34,7 +37,12 @@ def stock_margin_account_info() -> pd.DataFrame:
         "pageNo": "1",
         "pageNum": "1",
     }
-    r = requests.get(url=url, params=params)
+    # 不使用代理
+    # r = requests.get(url=url, params=params)
+
+    # 使用代理
+    r = get(url=url, params=params)
+
     data_json = r.json()
     total_page = data_json["result"]["pages"]
     tqdm = get_tqdm()
@@ -48,7 +56,12 @@ def stock_margin_account_info() -> pd.DataFrame:
                 "pageNum": page,
             }
         )
-        r = requests.get(url=url, params=params)
+        # 不使用代理
+        # r = requests.get(url=url, params=params)
+
+        # 使用代理
+        r = get(url=url, params=params)
+
         data_json = r.json()
         temp_df = pd.DataFrame(data_json["result"]["data"])
         big_df = pd.concat(objs=[big_df, temp_df], ignore_index=True)

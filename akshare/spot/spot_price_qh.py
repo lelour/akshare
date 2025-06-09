@@ -9,7 +9,11 @@ https://www.99qh.com/data/spotTrend
 import json
 
 import pandas as pd
-import requests
+# import requests
+
+# 使用代理
+from akshare.request import get
+
 from bs4 import BeautifulSoup
 
 
@@ -21,7 +25,12 @@ def __get_item_of_spot_price_qh() -> pd.DataFrame:
     :rtype: str
     """
     url = "https://www.99qh.com/data/spotTrend"
-    r = requests.get(url)
+    # 不使用代理
+    # r = requests.get(url)
+
+    # 使用代理
+    r = get(url)
+
     soup = BeautifulSoup(r.text, features="lxml")
     data_text = soup.find(name="script", attrs={"id": "__NEXT_DATA__"}).text
     data_json = json.loads(data_text)
@@ -47,7 +56,12 @@ def __get_token_of_spot_price_qh() -> str:
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) "
         "Chrome/124.0.0.0 Safari/537.36",
     }
-    r = requests.get(url, headers=headers)
+    # 不使用代理
+    # r = requests.get(url, headers=headers)
+
+    # 使用代理
+    r = get(url, headers=headers)
+
     token = r.headers["_pcc"]
     return token
 
@@ -103,7 +117,12 @@ def spot_price_qh(symbol: str = "螺纹钢") -> pd.DataFrame:
         "endDate": "2050-01-01",
         "appCategory": "web",
     }
-    r = requests.get(url, params=params, headers=headers)
+    # 不使用代理
+    # r = requests.get(url, params=params, headers=headers)
+
+    # 使用代理
+    r = get(url, params=params, headers=headers)
+
     data_json = r.json()
     temp_df = pd.DataFrame(data_json["data"]["list"])
     temp_df.rename(

@@ -9,7 +9,10 @@ https://fundf10.eastmoney.com/jjfl_015641.html
 from io import StringIO
 
 import pandas as pd
-import requests
+# import requests
+
+# 使用代理
+from akshare.request import get
 
 
 def fund_fee_em(symbol: str = "015641", indicator: str = "认购费率") -> pd.DataFrame:
@@ -24,7 +27,9 @@ def fund_fee_em(symbol: str = "015641", indicator: str = "认购费率") -> pd.D
     :rtype: pandas.DataFrame
     """
     url = f"https://fundf10.eastmoney.com/jjfl_{symbol}.html"
-    r = requests.get(url)
+    # r = requests.get(url)
+    # 使用代理
+    r = get(url=url)
 
     if indicator == "交易状态":
         temp_df = pd.read_html(StringIO(r.text))[1]

@@ -7,7 +7,10 @@ https://finance.sina.com.cn/futuremarket/spotprice.shtml#titlePos_0
 """
 
 import pandas as pd
-import requests
+# import requests
+
+# 使用代理
+from akshare.request import get
 
 
 def spot_goods(symbol: str = "波罗的海干散货指数") -> pd.DataFrame:
@@ -26,7 +29,11 @@ def spot_goods(symbol: str = "波罗的海干散货指数") -> pd.DataFrame:
         "澳大利亚粉矿价格": "PB",
     }
     params = {"symbol": symbol_url_dict[symbol], "table": "0"}
-    r = requests.get(url, params=params)
+    # r = requests.get(url, params=params)
+
+    # 使用代理
+    r = get(url=url, params=params)
+
     r.encoding = "gbk"
     data_json = r.json()
     temp_df = pd.DataFrame(data_json["result"]["data"]["data"])

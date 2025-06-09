@@ -6,7 +6,10 @@ Desc: 东方财富-德国-经济数据
 """
 
 import pandas as pd
-import requests
+# import requests
+
+# 使用代理
+from akshare.request import get
 
 
 def macro_germany_core(symbol: str = "EMG00179154") -> pd.DataFrame:
@@ -33,7 +36,11 @@ def macro_germany_core(symbol: str = "EMG00179154") -> pd.DataFrame:
         "pageNo": "1",
         "pageNum": "1",
     }
-    r = requests.get(url, params=params)
+    # r = requests.get(url, params=params)
+
+    # 使用代理
+    r = get(url=url, params=params)
+
     data_json = r.json()
     temp_df = pd.DataFrame(data_json["result"]["data"])
     temp_df.rename(

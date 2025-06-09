@@ -9,7 +9,11 @@ https://stock.eastmoney.com/a/czpnc.html
 from datetime import datetime
 
 import pandas as pd
-import requests
+# import requests
+
+# 使用代理
+from akshare.request import get
+
 from bs4 import BeautifulSoup
 
 from akshare.request import make_request_with_retry_json
@@ -38,7 +42,12 @@ def stock_info_cjzc_em() -> pd.DataFrame:
     big_df = pd.DataFrame()
     for page in range(1, 3):
         params.update({"page_index": page})
-        r = requests.get(url, params=params)
+        # 不使用代理
+        # r = requests.get(url, params=params)
+
+        # 使用代理
+        r = get(url, params=params)
+
         data_json = r.json()
         temp_df = pd.DataFrame(data_json["data"]["list"])
         big_df = pd.concat(objs=[big_df, temp_df], ignore_index=True)
@@ -72,7 +81,12 @@ def stock_info_global_em() -> pd.DataFrame:
         "pageSize": "200",
         "req_trace": "1710315450384",
     }
-    r = requests.get(url, params=params)
+    # 不使用代理
+    # r = requests.get(url, params=params)
+
+    # 使用代理
+    r = get(url, params=params)
+
     data_json = r.json()
     temp_df = pd.DataFrame(data_json["data"]["fastNewsList"])
     temp_df = temp_df[["title", "summary", "showTime", "code"]]
@@ -109,7 +123,12 @@ def stock_info_global_sina() -> pd.DataFrame:
         "pagesize": "20",
         "type": "1",
     }
-    r = requests.get(url, params=params)
+    # 不使用代理
+    # r = requests.get(url, params=params)
+
+    # 使用代理
+    r = get(url, params=params)
+
     data_json = r.json()
     time_list = [
         item["create_time"] for item in data_json["result"]["data"]["feed"]["list"]
@@ -137,7 +156,12 @@ def stock_info_global_futu() -> pd.DataFrame:
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko)"
         " Chrome/111.0.0.0 Safari/537.36"
     }
-    r = requests.get(url, params=params, headers=headers)
+    # 不使用代理
+    # r = requests.get(url, params=params, headers=headers)
+
+    # 使用代理
+    r = get(url, params=params, headers=headers)
+
     data_json = r.json()
 
     temp_df = pd.DataFrame(data_json["data"]["data"]["news"])
@@ -171,7 +195,12 @@ def stock_info_global_ths() -> pd.DataFrame:
         "tag": "",
         "track": "website",
     }
-    r = requests.get(url, params=params, headers=headers)
+    # 不使用代理
+    # r = requests.get(url, params=params, headers=headers)
+
+    # 使用代理
+    r = get(url, params=params, headers=headers)
+
     data_json = r.json()
     temp_df = pd.DataFrame(data_json["data"]["list"])
     temp_df = temp_df[["title", "digest", "rtime", "url"]]
@@ -234,7 +263,12 @@ def stock_info_broker_sina(page: str = "1") -> pd.DataFrame:
     """
     url = "https://finance.sina.com.cn/roll/index.d.html?cid=221431"
     params = {"page": page}
-    r = requests.get(url, params=params)
+    # 不使用代理
+    # r = requests.get(url, params=params)
+
+    # 使用代理
+    r = get(url, params=params)
+
     r.encoding = "utf-8"
     data_text = r.text
     soup = BeautifulSoup(data_text, features="lxml")

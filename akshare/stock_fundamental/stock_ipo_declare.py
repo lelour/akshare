@@ -7,7 +7,10 @@ https://data.eastmoney.com/xg/xg/sbqy.html
 """
 
 import pandas as pd
-import requests
+# import requests
+
+# 使用代理
+from akshare.request import get
 
 from akshare.utils import demjson
 
@@ -31,7 +34,12 @@ def stock_ipo_declare() -> pd.DataFrame:
         "mkt": "1",
         "fd": "2021-04-02",
     }
-    r = requests.get(url, params=params)
+    # 不使用代理
+    # r = requests.get(url, params=params)
+
+    # 使用代理
+    r = get(url, params=params)
+
     data_text = r.text
     data_json = demjson.decode(data_text[1:-1])
     temp_df = pd.DataFrame([item.split(",") for item in data_json["data"]])

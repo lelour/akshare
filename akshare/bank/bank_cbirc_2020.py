@@ -13,7 +13,11 @@ import warnings
 from io import StringIO
 
 import pandas as pd
-import requests
+# import requests
+
+# 使用代理
+from akshare.request import get
+
 from tqdm import tqdm
 
 from akshare.bank.cons import cbirc_headers_without_cookie_2020
@@ -40,7 +44,9 @@ def bank_fjcf_total_num(item: str = "分局本级") -> int:
         "pageSize": "18",
         "pageIndex": "1",
     }
-    res = requests.get(main_url, params=params, headers=cbirc_headers)
+    # res = requests.get(main_url, params=params, headers=cbirc_headers)
+    res = get(main_url, params=params, headers=cbirc_headers)
+
     return int(res.json()["data"]["total"])
 
 
@@ -67,7 +73,9 @@ def bank_fjcf_total_page(item: str = "分局本级", begin: int = 1) -> int:
         "pageSize": "18",
         "pageIndex": str(begin),
     }
-    res = requests.get(main_url, params=params, headers=cbirc_headers)
+    # res = requests.get(main_url, params=params, headers=cbirc_headers)
+    res = get(main_url, params=params, headers=cbirc_headers)
+
     if res.json()["data"]["total"] / 18 > int(res.json()["data"]["total"] / 18):
         total_page = int(res.json()["data"]["total"] / 18) + 1
         return total_page
@@ -101,7 +109,9 @@ def bank_fjcf_page_url(
             "pageSize": "18",
             "pageIndex": str(i_page),
         }
-        res = requests.get(main_url, params=params, headers=cbirc_headers)
+        # res = requests.get(main_url, params=params, headers=cbirc_headers)
+        res = get(main_url, params=params, headers=cbirc_headers)
+
         temp_df = pd.concat([temp_df, pd.DataFrame(res.json()["data"]["rows"])])
     return temp_df[
         ["docId", "docSubtitle", "publishDate", "docFileUrl", "docTitle", "generaltype"]
@@ -126,7 +136,9 @@ def bank_fjcf_table_detail(
     big_df = pd.DataFrame()
     for item in id_list:
         url = f"https://www.nfra.gov.cn/cn/static/data/DocInfo/SelectByDocId/data_docId={item}.json"
-        res = requests.get(url)
+        # res = requests.get(url)
+        res = get(url)
+
         try:
             table_list = pd.read_html(StringIO(res.json()["data"]["docClob"]))[0]
             if table_list.shape[1] == 2:

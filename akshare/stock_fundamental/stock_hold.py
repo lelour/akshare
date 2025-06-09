@@ -9,7 +9,10 @@ https://vip.stock.finance.sina.com.cn/q/go.php/vComStockHold/kind/jgcg/index.pht
 from io import StringIO
 
 import pandas as pd
-import requests
+# import requests
+
+# 使用代理
+from akshare.request import get
 
 from akshare.utils import demjson
 
@@ -30,7 +33,12 @@ def stock_institute_hold(symbol: str = "20051") -> pd.DataFrame:
         "reportdate": symbol[:-1],
         "quarter": symbol[-1],
     }
-    r = requests.get(url, params=params)
+    # 不使用代理
+    # r = requests.get(url, params=params)
+
+    # 使用代理
+    r = get(url, params=params)
+
     temp_df = pd.read_html(StringIO(r.text))[0]
     temp_df["证券代码"] = temp_df["证券代码"].astype(str).str.zfill(6)
     del temp_df["明细"]
@@ -73,7 +81,12 @@ def stock_institute_hold_detail(
         "symbol": stock,
         "quarter": quarter,
     }
-    r = requests.get(url, params=params)
+    # 不使用代理
+    # r = requests.get(url, params=params)
+
+    # 使用代理
+    r = get(url, params=params)
+
     text_data = r.text
     json_data = demjson.decode(text_data[text_data.find("{") : -2])
     big_df = pd.DataFrame()

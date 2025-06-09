@@ -5,7 +5,11 @@ Date: 2022/4/7 17:36
 Desc: http://kcb.sse.com.cn/renewal/#
 """
 
-import requests
+# import requests
+
+# 使用代理
+from akshare.request import get
+
 import pandas as pd
 
 # TODO
@@ -48,7 +52,12 @@ def stock_kcb_renewal():
                 "pageHelp.endPage": page,
             }
         )
-        r = requests.get(url, params=params, headers=headers)
+        # 不使用代理
+        # r = requests.get(url, params=params, headers=headers)
+
+        # 使用代理
+        r = get(url, params=params, headers=headers)
+
         data_json = r.json()
         temp_df = pd.DataFrame(data_json["result"])
         # 处理下 temp_df 里面的字段就可以了

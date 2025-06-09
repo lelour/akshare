@@ -8,7 +8,11 @@ https://www.jisilu.cn/data/cnreits/#CnReits
 """
 
 import pandas as pd
-import requests
+# import requests
+
+# 使用代理
+from akshare.request import get
+
 from functools import lru_cache
 from typing import Dict
 
@@ -34,7 +38,9 @@ def __reits_code_market_map() -> Dict:
         "fs": "m:1 t:9 e:97,m:0 t:10 e:97",
         "fields": "f12,f13",
     }
-    r = requests.get(url, params=params)
+    # r = requests.get(url, params=params)
+    r = get(url=url, params=params)
+
     data_json = r.json()
     temp_df = pd.DataFrame(data_json["data"]["diff"])
     temp_dict = dict(zip(temp_df["f12"], temp_df["f13"]))
@@ -61,7 +67,9 @@ def reits_realtime_em() -> pd.DataFrame:
         "fs": "m:1 t:9 e:97,m:0 t:10 e:97",
         "fields": "f2,f3,f4,f5,f6,f12,f14,f15,f16,f17,f18",
     }
-    r = requests.get(url, params=params)
+    # r = requests.get(url, params=params)
+    r = get(url=url, params=params)
+
     data_json = r.json()
     temp_df = pd.DataFrame(data_json["data"]["diff"])
     temp_df.reset_index(inplace=True)
@@ -135,7 +143,9 @@ def reits_hist_em(symbol: str = "508097") -> pd.DataFrame:
         "ut": "f057cbcbce2a86e2866ab8877db1d059",
         "forcect": "1",
     }
-    r = requests.get(url, params=params)
+    # r = requests.get(url, params=params)
+    r = get(url=url, params=params)
+
     data_json = r.json()
     temp_df = pd.DataFrame([item.split(",") for item in data_json["data"]["klines"]])
     temp_df.columns = [
@@ -189,7 +199,9 @@ def reits_hist_min_em(symbol: str = "508097") -> pd.DataFrame:
         "ut": "f057cbcbce2a86e2866ab8877db1d059",
         "ndays": "5",
     }
-    r = requests.get(url, params=params)
+    # r = requests.get(url, params=params)
+    r = get(url=url, params=params)
+
     data_json = r.json()
     temp_df = pd.DataFrame([item.split(",") for item in data_json["data"]["trends"]])
     temp_df.columns = [

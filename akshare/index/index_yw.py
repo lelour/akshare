@@ -12,7 +12,10 @@ Desc: 义乌小商品指数
 """
 
 import pandas as pd
-import requests
+# import requests
+
+# 使用代理
+from akshare.request import get
 
 
 def index_yw(symbol: str = "月景气指数") -> pd.DataFrame:
@@ -29,7 +32,11 @@ def index_yw(symbol: str = "月景气指数") -> pd.DataFrame:
 
     if symbol == "月景气指数":
         url = "https://apiserver.chinagoods.com/yiwuindex/v1/active/industry/class/history/bi?gcCode="
-        r = requests.get(url, verify=False)
+        # r = requests.get(url, verify=False)
+
+        # 使用代理
+        r = get(url=url, verify=False)
+
         data_json = r.json()
         temp_df = pd.DataFrame(data_json["data"])
         temp_df = temp_df[["indextimeno", "totalindex", "scopeindex", "benifitindex", "confidentindex"]]
@@ -49,7 +56,11 @@ def index_yw(symbol: str = "月景气指数") -> pd.DataFrame:
             "月价格指数": "month"
         }
         url = f"https://apiserver.chinagoods.com/yiwuindex/v1/active/industry/class/history/{symbol_map[symbol]}?gcCode="
-        r = requests.get(url, verify=False)
+        # r = requests.get(url, verify=False)
+
+        # 使用代理
+        r = get(url=url, verify=False)
+
         data_json = r.json()
         columns_name = {
             "indextimeno": "期数",

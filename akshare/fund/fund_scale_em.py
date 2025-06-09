@@ -7,7 +7,10 @@ https://fund.eastmoney.com/data/cyrjglist.html
 """
 
 import pandas as pd
-import requests
+# import requests
+
+# 使用代理
+from akshare.request import get
 
 from akshare.utils import demjson
 
@@ -28,7 +31,11 @@ def fund_scale_change_em() -> pd.DataFrame:
         "st": "desc",
         "sc": "reportdate",
     }
-    r = requests.get(url, params=params)
+    # r = requests.get(url, params=params)
+
+    # 使用代理
+    r = get(url=url, params=params)
+
     data_text = r.text
     data_json = demjson.decode(data_text[data_text.find("{") : -1])
     total_page = data_json["pages"]
@@ -84,14 +91,22 @@ def fund_hold_structure_em() -> pd.DataFrame:
         "st": "desc",
         "sc": "reportdate",
     }
-    r = requests.get(url, params=params)
+    # r = requests.get(url, params=params)
+
+    # 使用代理
+    r = get(url=url, params=params)
+
     data_text = r.text
     data_json = demjson.decode(data_text[data_text.find("{") : -1])
     total_page = data_json["pages"]
     big_df = pd.DataFrame()
     for page in range(1, int(total_page) + 1):
         params.update({"pi": page})
-        r = requests.get(url, params=params)
+        # r = requests.get(url, params=params)
+
+        # 使用代理
+        r = get(url=url, params=params)
+
         data_text = r.text
         data_json = demjson.decode(data_text[data_text.find("{") : -1])
         temp_df = pd.DataFrame(data_json["data"])

@@ -7,7 +7,10 @@ https://fund.eastmoney.com/data/xinfound.html
 """
 
 import pandas as pd
-import requests
+# import requests
+
+# 使用代理
+from akshare.request import get
 
 from akshare.utils import demjson
 
@@ -28,7 +31,11 @@ def fund_new_found_em() -> pd.DataFrame:
         "isbuy": "1",
         "v": "0.4069919776543214",
     }
-    r = requests.get(url, params=params)
+    # r = requests.get(url, params=params)
+
+    # 使用代理
+    r = get(url=url, params=params)
+
     data_text = r.text
     data_json = demjson.decode(data_text.strip("var newfunddata="))
     temp_df = pd.DataFrame(data_json["datas"])

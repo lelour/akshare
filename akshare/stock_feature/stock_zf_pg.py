@@ -10,7 +10,10 @@ https://data.eastmoney.com/xg/pg/
 """
 
 import pandas as pd
-import requests
+# import requests
+
+# 使用代理
+from akshare.request import get
 
 from akshare.utils.tqdm import get_tqdm
 
@@ -38,7 +41,12 @@ def stock_qbzf_em() -> pd.DataFrame:
         "source": "WEB",
         "client": "WEB",
     }
-    r = requests.get(url, params=params)
+    # 不使用代理
+    # r = requests.get(url, params=params)
+
+    # 使用代理
+    r = get(url, params=params)
+
     data_json = r.json()
     total_page = data_json["result"]["pages"]
     big_df = pd.DataFrame()
@@ -49,7 +57,12 @@ def stock_qbzf_em() -> pd.DataFrame:
                 "pageNumber": page,
             }
         )
-        r = requests.get(url, params=params)
+        # 不使用代理
+        # r = requests.get(url, params=params)
+
+        # 使用代理
+        r = get(url, params=params)
+
         data_json = r.json()
         temp_df = pd.DataFrame(data_json["result"]["data"])
         big_df = pd.concat(objs=[big_df, temp_df], ignore_index=True)
@@ -119,7 +132,12 @@ def stock_pg_em() -> pd.DataFrame:
         "source": "WEB",
         "client": "WEB",
     }
-    r = requests.get(url, params=params)
+    # 不使用代理
+    # r = requests.get(url, params=params)
+
+    # 使用代理
+    r = get(url, params=params)
+
     data_json = r.json()
     total_page = data_json["result"]["pages"]
     big_df = pd.DataFrame()
@@ -130,7 +148,12 @@ def stock_pg_em() -> pd.DataFrame:
                 "pageNumber": page,
             }
         )
-        r = requests.get(url, params=params)
+        # 不使用代理
+        # r = requests.get(url, params=params)
+
+        # 使用代理
+        r = get(url, params=params)
+
         data_json = r.json()
         temp_df = pd.DataFrame(data_json["result"]["data"])
         big_df = pd.concat(objs=[big_df, temp_df], ignore_index=True)

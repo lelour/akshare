@@ -9,7 +9,11 @@ https://www.legulegu.com/stockdata/market-activity
 from io import StringIO
 
 import pandas as pd
-import requests
+# import requests
+
+# 使用代理
+from akshare.request import get
+
 from bs4 import BeautifulSoup
 
 from akshare.utils.cons import headers
@@ -23,7 +27,12 @@ def stock_market_activity_legu() -> pd.DataFrame:
     :rtype: pandas.DataFrame
     """
     url = "https://legulegu.com/stockdata/market-activity"
-    r = requests.get(url, headers=headers)
+    # 不使用代理
+    # r = requests.get(url, headers=headers)
+
+    # 使用代理
+    r = get(url, headers=headers)
+
     temp_df = pd.read_html(StringIO(r.text))[0]
     temp_df_one = temp_df.iloc[:, :2]
     temp_df_one.columns = ["item", "value"]

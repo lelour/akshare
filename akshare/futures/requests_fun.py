@@ -12,6 +12,9 @@ from typing import Dict
 import pandas as pd
 import requests
 
+# 使用代理
+from akshare.request import get, post
+
 
 def requests_link(
     url: str,
@@ -33,11 +36,17 @@ def requests_link(
     while True:
         try:
             if method == "get":
-                r = requests.get(url, timeout=20, headers=headers)
+                # r = requests.get(url, timeout=20, headers=headers)
+                # 使用代理
+                r = get(url=url, timeout=20, headers=headers)
+
                 r.encoding = encoding
                 return r
             elif method == "post":
-                r = requests.post(url, timeout=20, data=data, headers=headers)
+                # r = requests.post(url, timeout=20, data=data, headers=headers)
+                # 使用代理
+                r = post(url=url, timeout=20, data=data, headers=headers)
+
                 r.encoding = encoding
                 return r
             else:
@@ -70,12 +79,18 @@ def pandas_read_html_link(
     while True:
         try:
             if method == "get":
-                r = requests.get(url, timeout=20)
+                # r = requests.get(url, timeout=20)
+                # 使用代理
+                r = get(url=url, timeout=20)
+
                 r.encoding = encoding
                 r = pd.read_html(StringIO(r.text), encoding=encoding)
                 return r
             elif method == "post":
-                r = requests.post(url, timeout=20, data=data, headers=headers)
+                # r = requests.post(url, timeout=20, data=data, headers=headers)
+                # 使用代理
+                r = post(url=url, timeout=20, data=data, headers=headers)
+
                 r.encoding = encoding
                 r = pd.read_html(StringIO(r.text), encoding=encoding)
                 return r

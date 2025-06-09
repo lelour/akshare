@@ -7,7 +7,11 @@ https://data.eastmoney.com/zdht/mx.html
 """
 
 import pandas as pd
-import requests
+# import requests
+
+# 使用代理
+from akshare.request import get
+
 from akshare.utils.tqdm import get_tqdm
 
 
@@ -35,7 +39,12 @@ def stock_zdhtmx_em(
         "filter": f"""(DIM_RDATE>='{"-".join([start_date[:4], start_date[4:6], start_date[6:]])}')
         (DIM_RDATE<='{"-".join([end_date[:4], end_date[4:6], end_date[6:]])}')""",
     }
-    r = requests.get(url, params=params)
+    # 不使用代理
+    # r = requests.get(url, params=params)
+
+    # 使用代理
+    r = get(url, params=params)
+
     data_json = r.json()
     total_page = data_json["result"]["pages"]
     big_df = pd.DataFrame()
@@ -46,7 +55,12 @@ def stock_zdhtmx_em(
                 "pageNumber": page,
             }
         )
-        r = requests.get(url, params=params)
+        # 不使用代理
+        # r = requests.get(url, params=params)
+
+        # 使用代理
+        r = get(url, params=params)
+
         data_json = r.json()
         temp_df = pd.DataFrame(data_json["result"]["data"])
         big_df = pd.concat(objs=[big_df, temp_df], axis=0, ignore_index=True)

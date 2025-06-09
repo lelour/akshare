@@ -8,8 +8,11 @@ https://infogram.com/world-container-index-1h17493095xl4zj
 """
 
 import pandas as pd
-import requests
+# import requests
 from bs4 import BeautifulSoup
+
+# 使用代理
+from akshare.request import get
 
 from akshare.utils import demjson
 
@@ -35,7 +38,11 @@ def drewry_wci_index(symbol: str = "composite") -> pd.DataFrame:
         "rotterdam-new york": 7,
     }
     url = "https://infogram.com/world-container-index-1h17493095xl4zj"
-    r = requests.get(url)
+    # r = requests.get(url)
+
+    # 使用代理
+    r = get(url=url)
+
     soup = BeautifulSoup(r.text, features="lxml")
     data_text = soup.find_all("script")[-4].string.strip("window.infographicData=")[:-1]
     data_json = demjson.decode(data_text)

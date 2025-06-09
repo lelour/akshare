@@ -7,7 +7,10 @@ https://emweb.securities.eastmoney.com/PC_HKF10/FinancialAnalysis/index?type=web
 """
 
 import pandas as pd
-import requests
+# import requests
+
+# 使用代理
+from akshare.request import get
 
 
 def stock_financial_hk_report_em(
@@ -36,7 +39,12 @@ def stock_financial_hk_report_em(
         "client": "PC",
         "v": "02092616586970355",
     }
-    r = requests.get(url, params=params)
+    # 不使用代理
+    # r = requests.get(url, params=params)
+
+    # 使用代理
+    r = get(url, params=params)
+
     data_json = r.json()
     temp_df = pd.DataFrame(data_json["result"]["data"][0]["REPORT_LIST"])
     if indicator == "年度":
@@ -59,7 +67,12 @@ def stock_financial_hk_report_em(
             "client": "PC",
             "v": "01975982096513973",
         }
-        r = requests.get(url, params=params)
+        # 不使用代理
+        # r = requests.get(url, params=params)
+
+        # 使用代理
+        r = get(url, params=params)
+
         data_json = r.json()
         temp_df = pd.DataFrame(data_json["result"]["data"])
         return temp_df
@@ -78,7 +91,12 @@ def stock_financial_hk_report_em(
             "client": "PC",
             "v": "01975982096513973",
         }
-        r = requests.get(url, params=params)
+        # 不使用代理
+        # r = requests.get(url, params=params)
+
+        # 使用代理
+        r = get(url, params=params)
+
         data_json = r.json()
         temp_df = pd.DataFrame(data_json["result"]["data"])
         return temp_df
@@ -97,7 +115,12 @@ def stock_financial_hk_report_em(
             "client": "PC",
             "v": "01975982096513973",
         }
-        r = requests.get(url, params=params)
+        # 不使用代理
+        # r = requests.get(url, params=params)
+
+        # 使用代理
+        r = get(url, params=params)
+
         data_json = r.json()
         temp_df = pd.DataFrame(data_json["result"]["data"])
         return temp_df
@@ -135,7 +158,12 @@ def stock_financial_hk_analysis_indicator_em(
         params.update({"filter": f"""(SECUCODE="{symbol}.HK")(DATE_TYPE_CODE="001")"""})
     else:
         params.update({"filter": f"""(SECUCODE="{symbol}.HK")"""})
-    r = requests.get(url, params=params)
+    # 不使用代理
+    # r = requests.get(url, params=params)
+
+    # 使用代理
+    r = get(url, params=params)
+
     data_json = r.json()
     temp_df = pd.DataFrame(data_json["result"]["data"])
     return temp_df

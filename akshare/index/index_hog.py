@@ -7,7 +7,10 @@ https://hqb.nxin.com/pigindex/index.shtml
 """
 
 import pandas as pd
-import requests
+# import requests
+
+# 使用代理
+from akshare.request import get
 
 
 def index_hog_spot_price() -> pd.DataFrame:
@@ -19,7 +22,11 @@ def index_hog_spot_price() -> pd.DataFrame:
     """
     url = "https://hqb.nxin.com/pigindex/getPigIndexChart.shtml"
     params = {"regionId": "0"}
-    r = requests.get(url, params=params)
+    # r = requests.get(url, params=params)
+
+    # 使用代理
+    r = get(url=url, params=params)
+
     data_json = r.json()
     temp_df = pd.DataFrame(data_json["data"])
     temp_df.columns = [

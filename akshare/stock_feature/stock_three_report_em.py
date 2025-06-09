@@ -8,7 +8,11 @@ Desc: 东方财富-股票-财务分析
 from functools import lru_cache
 
 import pandas as pd
-import requests
+# import requests
+
+# 使用代理
+from akshare.request import get
+
 from bs4 import BeautifulSoup
 
 from akshare.utils.tqdm import get_tqdm
@@ -26,7 +30,12 @@ def _stock_balance_sheet_by_report_ctype_em(symbol: str = "SH600519") -> str:
     """
     url = "https://emweb.securities.eastmoney.com/PC_HSF10/NewFinanceAnalysis/Index"
     params = {"type": "web", "code": symbol.lower()}
-    r = requests.get(url, params=params)
+    # 不使用代理
+    # r = requests.get(url, params=params)
+
+    # 使用代理
+    r = get(url, params=params)
+
     soup = BeautifulSoup(r.text, features="lxml")
     company_type = soup.find(attrs={"id": "hidctype"})["value"]
     return company_type
@@ -48,7 +57,12 @@ def stock_balance_sheet_by_report_em(symbol: str = "SH600519") -> pd.DataFrame:
         "reportDateType": "0",
         "code": symbol,
     }
-    r = requests.get(url, params=params)
+    # 不使用代理
+    # r = requests.get(url, params=params)
+
+    # 使用代理
+    r = get(url, params=params)
+
     data_json = r.json()
     temp_df = pd.DataFrame(data_json["data"])
     temp_df["REPORT_DATE"] = pd.to_datetime(temp_df["REPORT_DATE"]).dt.date
@@ -66,7 +80,12 @@ def stock_balance_sheet_by_report_em(symbol: str = "SH600519") -> pd.DataFrame:
             "dates": item,
             "code": symbol,
         }
-        r = requests.get(url, params=params)
+        # 不使用代理
+        # r = requests.get(url, params=params)
+
+        # 使用代理
+        r = get(url, params=params)
+
         data_json = r.json()
         if "data" not in data_json.keys():
             break
@@ -97,14 +116,24 @@ def stock_balance_sheet_by_yearly_em(symbol: str = "SH600036") -> pd.DataFrame:
         "reportDateType": "1",
         "code": symbol,
     }
-    r = requests.get(url, params=params)
+    # 不使用代理
+    # r = requests.get(url, params=params)
+
+    # 使用代理
+    r = get(url, params=params)
+
     data_json = r.json()
     try:
         temp_df = pd.DataFrame(data_json["data"])
     except:  # noqa: E722
         company_type = '3'
         params.update({"companyType": company_type})
-        r = requests.get(url, params=params)
+        # 不使用代理
+        # r = requests.get(url, params=params)
+
+        # 使用代理
+        r = get(url, params=params)
+
         data_json = r.json()
         temp_df = pd.DataFrame(data_json["data"])
     temp_df["REPORT_DATE"] = pd.to_datetime(
@@ -124,7 +153,12 @@ def stock_balance_sheet_by_yearly_em(symbol: str = "SH600036") -> pd.DataFrame:
             "dates": item,
             "code": symbol,
         }
-        r = requests.get(url, params=params)
+        # 不使用代理
+        # r = requests.get(url, params=params)
+
+        # 使用代理
+        r = get(url, params=params)
+
         data_json = r.json()
         if "data" not in data_json.keys():
             break
@@ -155,7 +189,12 @@ def stock_profit_sheet_by_report_em(symbol: str = "SH600519") -> pd.DataFrame:
         "reportDateType": "0",
         "code": symbol,
     }
-    r = requests.get(url, params=params)
+    # 不使用代理
+    # r = requests.get(url, params=params)
+
+    # 使用代理
+    r = get(url, params=params)
+
     data_json = r.json()
     temp_df = pd.DataFrame(data_json["data"])
     temp_df["REPORT_DATE"] = pd.to_datetime(temp_df["REPORT_DATE"]).dt.date
@@ -173,7 +212,12 @@ def stock_profit_sheet_by_report_em(symbol: str = "SH600519") -> pd.DataFrame:
             "code": symbol,
             "dates": item,
         }
-        r = requests.get(url, params=params)
+        # 不使用代理
+        # r = requests.get(url, params=params)
+
+        # 使用代理
+        r = get(url, params=params)
+
         data_json = r.json()
         if "data" not in data_json.keys():
             break
@@ -204,7 +248,12 @@ def stock_profit_sheet_by_yearly_em(symbol: str = "SH600519") -> pd.DataFrame:
         "reportDateType": "1",
         "code": symbol,
     }
-    r = requests.get(url, params=params)
+    # 不使用代理
+    # r = requests.get(url, params=params)
+
+    # 使用代理
+    r = get(url, params=params)
+
     data_json = r.json()
     temp_df = pd.DataFrame(data_json["data"])
     temp_df["REPORT_DATE"] = pd.to_datetime(temp_df["REPORT_DATE"]).dt.date
@@ -222,7 +271,12 @@ def stock_profit_sheet_by_yearly_em(symbol: str = "SH600519") -> pd.DataFrame:
             "dates": item,
             "code": symbol,
         }
-        r = requests.get(url, params=params)
+        # 不使用代理
+        # r = requests.get(url, params=params)
+
+        # 使用代理
+        r = get(url, params=params)
+
         data_json = r.json()
         if "data" not in data_json.keys():
             break
@@ -255,7 +309,12 @@ def stock_profit_sheet_by_quarterly_em(
         "reportDateType": "2",
         "code": symbol,
     }
-    r = requests.get(url, params=params)
+    # 不使用代理
+    # r = requests.get(url, params=params)
+
+    # 使用代理
+    r = get(url, params=params)
+
     data_json = r.json()
     temp_df = pd.DataFrame(data_json["data"])
     temp_df["REPORT_DATE"] = pd.to_datetime(temp_df["REPORT_DATE"]).dt.date
@@ -273,7 +332,12 @@ def stock_profit_sheet_by_quarterly_em(
             "dates": item,
             "code": symbol,
         }
-        r = requests.get(url, params=params)
+        # 不使用代理
+        # r = requests.get(url, params=params)
+
+        # 使用代理
+        r = get(url, params=params)
+
         data_json = r.json()
         if "data" not in data_json.keys():
             break
@@ -306,7 +370,12 @@ def stock_cash_flow_sheet_by_report_em(
         "reportDateType": "0",
         "code": symbol,
     }
-    r = requests.get(url, params=params, timeout=10)
+    # 不使用代理
+    # r = requests.get(url, params=params, timeout=10)
+
+    # 使用代理
+    r = get(url, params=params, timeout=10)
+
     data_json = r.json()
     temp_df = pd.DataFrame(data_json["data"])
     temp_df["REPORT_DATE"] = pd.to_datetime(temp_df["REPORT_DATE"]).dt.date
@@ -324,7 +393,12 @@ def stock_cash_flow_sheet_by_report_em(
             "dates": item,
             "code": symbol,
         }
-        r = requests.get(url, params=params)
+        # 不使用代理
+        # r = requests.get(url, params=params)
+
+        # 使用代理
+        r = get(url, params=params)
+
         data_json = r.json()
         if "data" not in data_json.keys():
             break
@@ -357,7 +431,12 @@ def stock_cash_flow_sheet_by_yearly_em(
         "reportDateType": "1",
         "code": symbol,
     }
-    r = requests.get(url, params=params)
+    # 不使用代理
+    # r = requests.get(url, params=params)
+
+    # 使用代理
+    r = get(url, params=params)
+
     data_json = r.json()
     temp_df = pd.DataFrame(data_json["data"])
     temp_df["REPORT_DATE"] = pd.to_datetime(temp_df["REPORT_DATE"]).dt.date
@@ -375,7 +454,12 @@ def stock_cash_flow_sheet_by_yearly_em(
             "dates": item,
             "code": symbol,
         }
-        r = requests.get(url, params=params)
+        # 不使用代理
+        # r = requests.get(url, params=params)
+
+        # 使用代理
+        r = get(url, params=params)
+
         data_json = r.json()
         if "data" not in data_json.keys():
             break
@@ -408,7 +492,12 @@ def stock_cash_flow_sheet_by_quarterly_em(
         "reportDateType": "2",
         "code": symbol,
     }
-    r = requests.get(url, params=params)
+    # 不使用代理
+    # r = requests.get(url, params=params)
+
+    # 使用代理
+    r = get(url, params=params)
+
     data_json = r.json()
     temp_df = pd.DataFrame(data_json["data"])
     temp_df["REPORT_DATE"] = pd.to_datetime(temp_df["REPORT_DATE"]).dt.date
@@ -426,7 +515,12 @@ def stock_cash_flow_sheet_by_quarterly_em(
             "dates": item,
             "code": symbol,
         }
-        r = requests.get(url, params=params)
+        # 不使用代理
+        # r = requests.get(url, params=params)
+
+        # 使用代理
+        r = get(url, params=params)
+
         data_json = r.json()
         if "data" not in data_json.keys():
             break
@@ -463,7 +557,12 @@ def __get_report_date_list_delisted_em(symbol: str = "SZ000013") -> list:
         "client": "PC",
         "v": "05767841728614413",
     }
-    r = requests.get(url, params=params)
+    # 不使用代理
+    # r = requests.get(url, params=params)
+
+    # 使用代理
+    r = get(url, params=params)
+
     data_json = r.json()
     temp_df = pd.DataFrame(data_json["result"]["data"])
     report_date_list = [item[0] for item in temp_df["REPORT_DATE"].str.split(" ")]
@@ -494,7 +593,12 @@ def stock_balance_sheet_by_report_delisted_em(symbol: str = "SZ000013") -> pd.Da
         "client": "PC",
         "v": "05767841728614413",
     }
-    r = requests.get(url, params=params)
+    # 不使用代理
+    # r = requests.get(url, params=params)
+
+    # 使用代理
+    r = get(url, params=params)
+
     data_json = r.json()
     temp_df = pd.DataFrame(data_json["result"]["data"])
     temp_df["REPORT_DATE"] = pd.to_datetime(temp_df["REPORT_DATE"]).dt.date
@@ -527,7 +631,12 @@ def stock_profit_sheet_by_report_delisted_em(symbol: str = "SZ000013") -> pd.Dat
         "client": "PC",
         "v": "05767841728614413",
     }
-    r = requests.get(url, params=params)
+    # 不使用代理
+    # r = requests.get(url, params=params)
+
+    # 使用代理
+    r = get(url, params=params)
+
     data_json = r.json()
     temp_df = pd.DataFrame(data_json["result"]["data"])
     temp_df["REPORT_DATE"] = pd.to_datetime(temp_df["REPORT_DATE"]).dt.date
@@ -562,7 +671,12 @@ def stock_cash_flow_sheet_by_report_delisted_em(
         "client": "PC",
         "v": "05767841728614413",
     }
-    r = requests.get(url, params=params)
+    # 不使用代理
+    # r = requests.get(url, params=params)
+
+    # 使用代理
+    r = get(url, params=params)
+
     data_json = r.json()
     temp_df = pd.DataFrame(data_json["result"]["data"])
     temp_df["REPORT_DATE"] = pd.to_datetime(temp_df["REPORT_DATE"]).dt.date

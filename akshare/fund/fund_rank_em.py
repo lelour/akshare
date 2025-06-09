@@ -11,7 +11,10 @@ https://help.1234567.com.cn/list_236.html
 from datetime import datetime, date
 
 import pandas as pd
-import requests
+# import requests
+
+# 使用代理
+from akshare.request import get
 
 from akshare.utils import demjson
 
@@ -173,7 +176,11 @@ def fund_exchange_rank_em() -> pd.DataFrame:
         "Chrome/81.0.4044.138 Safari/537.36",
         "Referer": "https://fund.eastmoney.com/fundguzhi.html",
     }
-    r = requests.get(url, params=params, headers=headers)
+    # r = requests.get(url, params=params, headers=headers)
+
+    # 使用代理
+    r = get(url=url, params=params, headers=headers)
+
     text_data = r.text
     json_data = demjson.decode(text_data[text_data.find("{") : -1])
     temp_df = pd.DataFrame(json_data["datas"])
@@ -265,7 +272,11 @@ def fund_money_rank_em() -> pd.DataFrame:
         "Chrome/81.0.4044.138 Safari/537.36",
         "Referer": "https://fund.eastmoney.com/fundguzhi.html",
     }
-    r = requests.get(url, params=params, headers=headers)
+    # r = requests.get(url, params=params, headers=headers)
+
+    # 使用代理
+    r = get(url=url, params=params, headers=headers)
+
     json_data = r.json()
     temp_df = pd.DataFrame(json_data["Data"])
     temp_df.reset_index(inplace=True)
@@ -368,7 +379,11 @@ def fund_lcx_rank_em() -> pd.DataFrame:
         "Chrome/81.0.4044.138 Safari/537.36",
         "Referer": "https://fund.eastmoney.com/fundguzhi.html",
     }
-    r = requests.get(url, params=params, headers=headers)
+    # r = requests.get(url, params=params, headers=headers)
+
+    # 使用代理
+    r = get(url=url, params=params, headers=headers)
+
     try:
         data_json = r.json()
     except:  # noqa: E722
@@ -451,7 +466,11 @@ def fund_hk_rank_em() -> pd.DataFrame:
         "Chrome/81.0.4044.138 Safari/537.36",
         "Referer": "https://fund.eastmoney.com/fundguzhi.html",
     }
-    r = requests.get(url, params=params, headers=headers)
+    # r = requests.get(url, params=params, headers=headers)
+
+    # 使用代理
+    r = get(url=url, params=params, headers=headers)
+
     data_json = r.json()
     temp_df = pd.DataFrame(data_json["Data"])
     temp_df.reset_index(inplace=True)

@@ -9,7 +9,11 @@ https://basic.10jqka.com.cn/new/000063/finance.html
 import json
 
 import pandas as pd
-import requests
+# import requests
+
+# 使用代理
+from akshare.request import get
+
 from bs4 import BeautifulSoup
 
 from akshare.utils.cons import headers
@@ -29,7 +33,12 @@ def stock_financial_abstract_ths(
     :rtype: pandas.DataFrame
     """
     url = f"https://basic.10jqka.com.cn/new/{symbol}/finance.html"
-    r = requests.get(url, headers=headers)
+    # 不使用代理
+    # r = requests.get(url, headers=headers)
+
+    # 使用代理
+    r = get(url, headers=headers)
+
     soup = BeautifulSoup(r.text, features="lxml")
     data_text = soup.find(name="p", attrs={"id": "main"}).string
     data_json = json.loads(data_text)
@@ -70,7 +79,12 @@ def stock_financial_debt_ths(
     :rtype: pandas.DataFrame
     """
     url = f"https://basic.10jqka.com.cn/api/stock/finance/{symbol}_debt.json"
-    r = requests.get(url, headers=headers)
+    # 不使用代理
+    # r = requests.get(url, headers=headers)
+
+    # 使用代理
+    r = get(url, headers=headers)
+
     data_json = json.loads(json.loads(r.text)["flashData"])
     df_index = [
         item[0] if isinstance(item, list) else item for item in data_json["title"]
@@ -104,7 +118,12 @@ def stock_financial_benefit_ths(
     :rtype: pandas.DataFrame
     """
     url = f"https://basic.10jqka.com.cn/api/stock/finance/{symbol}_benefit.json"
-    r = requests.get(url, headers=headers)
+    # 不使用代理
+    # r = requests.get(url, headers=headers)
+
+    # 使用代理
+    r = get(url, headers=headers)
+
     data_json = json.loads(json.loads(r.text)["flashData"])
     df_index = [
         item[0] if isinstance(item, list) else item for item in data_json["title"]
@@ -142,7 +161,12 @@ def stock_financial_cash_ths(
     :rtype: pandas.DataFrame
     """
     url = f"https://basic.10jqka.com.cn/api/stock/finance/{symbol}_cash.json"
-    r = requests.get(url, headers=headers)
+    # 不使用代理
+    # r = requests.get(url, headers=headers)
+
+    # 使用代理
+    r = get(url, headers=headers)
+
     data_json = json.loads(json.loads(r.text)["flashData"])
     df_index = [
         item[0] if isinstance(item, list) else item for item in data_json["title"]
@@ -175,7 +199,12 @@ def stock_management_change_ths(symbol: str = "688981") -> pd.DataFrame:
     :rtype: pandas.DataFrame
     """
     url = f"https://basic.10jqka.com.cn/new/{symbol}/event.html"
-    r = requests.get(url, headers=headers)
+    # 不使用代理
+    # r = requests.get(url, headers=headers)
+
+    # 使用代理
+    r = get(url, headers=headers)
+
     r.encoding = "gb2312"
     soup = BeautifulSoup(r.text, features="lxml")
     soup_find = soup.find(name="table", attrs={"class": "data_table_1 m_table m_hl"})
@@ -223,7 +252,12 @@ def stock_shareholder_change_ths(symbol: str = "688981") -> pd.DataFrame:
     :rtype: pandas.DataFrame
     """
     url = f"https://basic.10jqka.com.cn/new/{symbol}/event.html"
-    r = requests.get(url, headers=headers)
+    # 不使用代理
+    # r = requests.get(url, headers=headers)
+
+    # 使用代理
+    r = get(url, headers=headers)
+
     r.encoding = "gb2312"
     soup = BeautifulSoup(r.text, features="lxml")
     soup_find = soup.find(name="table", attrs={"class": "m_table data_table_1 m_hl"})
